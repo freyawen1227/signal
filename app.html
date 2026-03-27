@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIGNAL — YouTube AI 视频解读</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+:root {
+  --bg: #ffffff; --bg-alt: #fafafa; --bg-card: #ffffff;
+  --bg-hover: #f5f5f5;
+  --border: #ddd; --border-hover: #bbb;
+  --text: #1e1e1e; --text-dim: #6a737d; --text-muted: #959da5;
+  --accent: #6f42c1; --accent-dim: rgba(111,66,193,0.08);
+  --keyword: #d73a49; --string: #22863a; --func: #005cc5;
+  --type: #e36209; --comment: #6a737d; --const: #6f42c1;
+  --pixel: 'Press Start 2P', monospace;
+  --mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --sans: 'Space Grotesk', -apple-system, 'PingFang SC', sans-serif;
+}
+body {
+  font-family: var(--sans); color: var(--text); background: var(--bg-alt);
+  line-height: 1.6; -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+::selection { background: var(--accent); color: #fff; }
+
+/* ===== Nav ===== */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(20px);
+  border-bottom: 2px dotted var(--border); height: 56px;
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px; max-width: 900px; margin: 0 auto; padding: 0 24px;
+}
+.nav-left { display: flex; align-items: center; gap: 28px; }
+.nav-logo {
+  font-family: var(--pixel); font-size: 11px; font-weight: 400;
+  letter-spacing: 1px;
+  display: flex; align-items: center; gap: 8px;
+}
+.nav-logo .dot { width: 8px; height: 8px; background: var(--accent); }
+.nav-right { display: flex; align-items: center; gap: 14px; }
+.user-menu {
+  display: flex; align-items: center; gap: 8px; cursor: pointer;
+  padding: 4px 8px; border-radius: 2px; transition: background 0.15s;
+  position: relative;
+}
+.user-menu:hover { background: var(--bg-hover); }
+.user-avatar {
+  width: 28px; height: 28px; border-radius: 2px;
+  border: 2px solid var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--pixel); font-size: 10px; font-weight: 400; color: var(--accent);
+}
+.user-name { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--text-dim); }
+.user-plan {
+  font-family: var(--pixel); font-size: 7px; font-weight: 400; padding: 2px 6px;
+  border-radius: 0; background: var(--bg-hover); color: var(--text-dim);
+  text-transform: uppercase; letter-spacing: 1px; border: 1px solid var(--border);
+}
+.user-plan.pro { background: var(--accent); color: #fff; border-color: var(--accent); }
+.user-dropdown {
+  display: none; position: absolute; top: 100%; right: 0; margin-top: 8px;
+  background: var(--bg-card); border-radius: 2px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border: 2px dotted var(--border); min-width: 200px; overflow: hidden; z-index: 200;
+}
+.user-dropdown.show { display: block; }
+.dropdown-header {
+  padding: 14px 16px; border-bottom: 2px dotted var(--border);
+  font-family: var(--mono); font-size: 12px; color: var(--text-dim);
+}
+.dropdown-header .email { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.dropdown-item {
+  display: block; width: 100%; padding: 10px 16px;
+  font-family: var(--mono); font-size: 12px; color: var(--text-dim);
+  border: none; background: none; text-align: left; cursor: pointer; transition: all 0.1s;
+}
+.dropdown-item:hover { background: var(--bg-hover); color: var(--text); }
+.dropdown-item.danger { color: var(--accent); }
+
+/* ===== Layout ===== */
+.main { max-width: 900px; margin: 0 auto; padding: 76px 24px 60px; }
+
+/* ===== Header ===== */
+.page-header { margin-bottom: 28px; }
+.page-header h1 {
+  font-family: var(--sans); font-size: 22px; font-weight: 700;
+  margin-bottom: 6px; letter-spacing: -0.3px;
+}
+.page-header p { font-family: var(--mono); font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+
+/* ===== Tabs ===== */
+.tabs {
+  display: flex; gap: 6px; margin-bottom: 24px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px;
+}
+.tab {
+  padding: 7px 14px; border-radius: 0;
+  font-family: var(--pixel); font-size: 8px; font-weight: 400;
+  cursor: pointer; transition: all 0.15s;
+  border: 2px dotted var(--border); background: transparent; color: var(--text-dim);
+  white-space: nowrap; flex-shrink: 0; letter-spacing: 0.3px;
+}
+.tab:hover { border-color: var(--accent); color: var(--accent); }
+.tab.active { background: var(--accent); color: #fff; border-color: var(--accent); border-style: solid; }
+
+/* ===== Video Cards ===== */
+.feed { display: flex; flex-direction: column; gap: 16px; }
+.card {
+  background: var(--bg-card); border-radius: 2px; padding: 24px;
+  border: 2px dotted var(--border); transition: all 0.2s; cursor: pointer;
+  position: relative;
+}
+.card:hover { border-color: var(--accent); background: var(--bg-hover); }
+.card.hidden { display: none; }
+.card-top {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;
+}
+.card-cat {
+  font-family: var(--pixel); font-size: 7px; font-weight: 400; padding: 3px 8px;
+  border-radius: 0; letter-spacing: 0.5px; text-transform: uppercase;
+}
+.cat-interview { background: rgba(215,58,73,0.07); color: #d73a49; border: 1px solid #d73a49; }
+.cat-keynote { background: rgba(0,92,197,0.07); color: #005cc5; border: 1px solid #005cc5; }
+.cat-debate { background: rgba(227,98,9,0.07); color: #e36209; border: 1px solid #e36209; }
+.cat-tech { background: rgba(34,134,58,0.07); color: #22863a; border: 1px solid #22863a; }
+.card-channel {
+  font-family: var(--mono); font-size: 11px; color: var(--accent); font-weight: 600;
+}
+.card-dot { color: var(--text-muted); font-size: 10px; }
+.card-duration {
+  font-family: var(--mono); font-size: 11px; color: var(--text-muted);
+  background: var(--bg-alt); padding: 2px 8px; border: 1px dotted var(--border);
+}
+.card-date { font-family: var(--mono); font-size: 11px; color: var(--text-muted); }
+.card h3 {
+  font-size: 17px; font-weight: 700; line-height: 1.5; margin-bottom: 8px;
+  letter-spacing: -0.2px; color: var(--text);
+}
+.card .card-summary {
+  font-size: 13px; color: var(--text-dim); line-height: 1.7; margin-bottom: 12px;
+}
+.card-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.card-tag {
+  font-family: var(--mono); font-size: 10px; padding: 2px 7px; border-radius: 0;
+  background: var(--bg-alt); color: var(--text-dim); border: 1px dotted var(--border);
+  letter-spacing: 0.3px;
+}
+.card-yt {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--mono); font-size: 10px; color: var(--text-muted);
+  margin-top: 12px; padding-top: 12px; border-top: 1px dotted var(--border);
+}
+.card-yt .yt-icon { color: #d73a49; font-size: 12px; }
+
+/* Paywall overlay */
+.feed-paywall { position: relative; overflow: hidden; }
+.feed-paywall .paywall-cards {
+  filter: blur(2px); opacity: 0.5; pointer-events: none; user-select: none;
+}
+.feed-paywall .paywall-overlay {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 10;
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.85) 40%, rgba(255,255,255,0.98) 70%);
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  gap: 16px; padding: 24px 24px 80px;
+}
+.paywall-overlay .paywall-icon {
+  font-family: var(--pixel); font-size: 24px; color: var(--accent); line-height: 1;
+}
+.paywall-overlay .paywall-title {
+  font-family: var(--sans); font-size: 20px; font-weight: 700; color: var(--text);
+  text-align: center;
+}
+.paywall-overlay .paywall-desc {
+  font-family: var(--mono); font-size: 13px; color: var(--text-dim);
+  text-align: center; line-height: 1.6; max-width: 360px;
+}
+.paywall-overlay .paywall-btn {
+  padding: 14px 36px; border-radius: 2px;
+  font-family: var(--pixel); font-size: 10px; font-weight: 400;
+  background: var(--accent); color: #fff; border: none; cursor: pointer;
+  letter-spacing: 0.5px; transition: all 0.2s;
+}
+.paywall-overlay .paywall-btn:hover { box-shadow: 0 0 0 4px var(--accent-dim); }
+.paywall-overlay .paywall-sub {
+  font-family: var(--mono); font-size: 11px; color: var(--text-muted);
+}
+
+/* ===== Toast ===== */
+.toast {
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+  background: var(--bg-card); color: var(--text); padding: 10px 20px; border-radius: 2px;
+  font-family: var(--mono); font-size: 12px; font-weight: 600; z-index: 1000;
+  transition: transform 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border: 2px dotted var(--border);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+  .user-name { display: none; }
+  .card h3 { font-size: 15px; }
+  .main { padding: 68px 16px 40px; }
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- ===== Nav ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <div class="nav-logo"><span class="dot"></span>SIGNAL</div>
+    </div>
+    <div class="nav-right">
+      <div class="user-menu" onclick="toggleDropdown()">
+        <div class="user-avatar" id="avatar">U</div>
+        <span class="user-name" id="userName">User</span>
+        <span class="user-plan" id="userPlan">FREE</span>
+        <div class="user-dropdown" id="dropdown">
+          <div class="dropdown-header">
+            <div id="dropdownName">User</div>
+            <div class="email" id="dropdownEmail">user@example.com</div>
+          </div>
+          <button class="dropdown-item">个人设置</button>
+          <button class="dropdown-item">订阅管理</button>
+          <button class="dropdown-item danger" onclick="logout()">退出登录</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== Main ===== -->
+<div class="main">
+  <div class="page-header">
+    <h1 id="greetingText">早上好</h1>
+    <p>YouTube 上最值得看的 AI 内容，我们帮你看完、翻译、解读。</p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" data-cat="all" onclick="filterCards(this)">全部</button>
+    <button class="tab" data-cat="interview" onclick="filterCards(this)">深度访谈</button>
+    <button class="tab" data-cat="keynote" onclick="filterCards(this)">大会演讲</button>
+    <button class="tab" data-cat="debate" onclick="filterCards(this)">圆桌激辩</button>
+    <button class="tab" data-cat="tech" onclick="filterCards(this)">技术解析</button>
+  </div>
+
+  <!-- Feed -->
+  <div class="feed" id="feed">
+
+    <div class="card" data-category="interview" data-id="huang-lex-fridman" onclick="openArticle(this)">
+      <div class="card-top">
+        <span class="card-cat cat-interview">深度访谈</span>
+        <span class="card-channel">Lex Fridman</span>
+        <span class="card-dot">/</span>
+        <span class="card-duration">约3小时</span>
+        <span class="card-dot">/</span>
+        <span class="card-date">2026-03-23</span>
+      </div>
+      <h3>黄仁勋最新深度访谈：从洗碗工到3万亿美元帝国掌舵人的思维操作系统</h3>
+      <p class="card-summary">黄仁勋系统性地阐述了英伟达从GPU加速器公司演变为"AI工厂"基础设施帝国的完整逻辑：CUDA的豪赌、极端协同设计哲学、AI四大扩展定律，以及他的"光速思维"方法论。</p>
+      <div class="card-tags">
+        <span class="card-tag">Jensen Huang</span>
+        <span class="card-tag">NVIDIA</span>
+        <span class="card-tag">CUDA</span>
+        <span class="card-tag">AI工厂</span>
+        <span class="card-tag">AGI</span>
+      </div>
+      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 Lex Fridman Podcast #494</div>
+    </div>
+
+    <div class="card" data-category="interview" data-id="huang-allin-gtc" onclick="openArticle(this)">
+      <div class="card-top">
+        <span class="card-cat cat-interview">深度访谈</span>
+        <span class="card-channel">All-In Podcast</span>
+        <span class="card-dot">/</span>
+        <span class="card-duration">约55分钟</span>
+        <span class="card-dot">/</span>
+        <span class="card-date">2026-03-22</span>
+      </div>
+      <h3>黄仁勋GTC大会深度对话：推理爆炸、Agent革命与AI的万亿美元未来</h3>
+      <p class="card-summary">GTC 2026大会上，All-In四位主播与黄仁勋深度对话。黄仁勋全面阐述英伟达向"AI工厂"的战略转型，推理需求两年增长一万倍，预测将达百万倍。</p>
+      <div class="card-tags">
+        <span class="card-tag">Jensen Huang</span>
+        <span class="card-tag">NVIDIA</span>
+        <span class="card-tag">GTC</span>
+        <span class="card-tag">Agent</span>
+        <span class="card-tag">推理</span>
+      </div>
+      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 All-In Podcast — GTC 2026 Live</div>
+    </div>
+
+    <div class="card" data-category="tech" data-id="karpathy-code-agents" onclick="openArticle(this)">
+      <div class="card-top">
+        <span class="card-cat cat-tech">技术解析</span>
+        <span class="card-channel">No Priors</span>
+        <span class="card-dot">/</span>
+        <span class="card-duration">约75分钟</span>
+        <span class="card-dot">/</span>
+        <span class="card-date">2026-03-21</span>
+      </div>
+      <h3>Karpathy深度访谈：代码智能体、自动化科研，以及AI的"循环时代"</h3>
+      <p class="card-summary">前OpenAI研究员Karpathy分享一线体验：从2025年12月起几乎不再亲手写代码，全天候用AI智能体"表达意志"，称之为"AI精神病"状态。</p>
+      <div class="card-tags">
+        <span class="card-tag">Andrej Karpathy</span>
+        <span class="card-tag">Code Agent</span>
+        <span class="card-tag">Auto Research</span>
+        <span class="card-tag">开源</span>
+      </div>
+      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 No Priors Podcast</div>
+    </div>
+
+    <div class="card" data-category="debate" data-id="allin-four-ceos-gtc" onclick="openArticle(this)">
+      <div class="card-top">
+        <span class="card-cat cat-debate">圆桌激辩</span>
+        <span class="card-channel">All-In Podcast</span>
+        <span class="card-dot">/</span>
+        <span class="card-duration">约55分钟</span>
+        <span class="card-dot">/</span>
+        <span class="card-date">2026-03-22</span>
+      </div>
+      <h3>四位AI CEO的GTC对话：算力、产品、开源与能源的终极博弈</h3>
+      <p class="card-summary">Jason Calacanis在GTC现场分别对话CoreWeave、Perplexity、Mistral AI、IREN四位CEO，覆盖算力基础设施、AI搜索、开源模型与能源瓶颈。</p>
+      <div class="card-tags">
+        <span class="card-tag">CoreWeave</span>
+        <span class="card-tag">Perplexity</span>
+        <span class="card-tag">Mistral</span>
+        <span class="card-tag">IREN</span>
+        <span class="card-tag">GTC</span>
+      </div>
+      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 All-In Podcast — GTC 2026</div>
+    </div>
+
+    <div class="card" data-category="interview" data-id="turley-chatgpt-assistant" onclick="openArticle(this)">
+      <div class="card-top">
+        <span class="card-cat cat-interview">深度访谈</span>
+        <span class="card-channel">BG2 Pod</span>
+        <span class="card-dot">/</span>
+        <span class="card-duration">约55分钟</span>
+        <span class="card-dot">/</span>
+        <span class="card-date">2026-03-20</span>
+      </div>
+      <h3>ChatGPT的超级助手野心：9亿周活背后的产品哲学与下一个十亿用户之战</h3>
+      <p class="card-summary">OpenAI产品负责人Nick Turley深入解析ChatGPT从"一个月后下线的demo"成长为9亿周活超级产品的历程，以及定价演变、GPU零和博弈与Code Red内幕。</p>
+      <div class="card-tags">
+        <span class="card-tag">Nick Turley</span>
+        <span class="card-tag">OpenAI</span>
+        <span class="card-tag">ChatGPT</span>
+        <span class="card-tag">产品</span>
+        <span class="card-tag">增长</span>
+      </div>
+      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 BG2 Pod — Guest Interview</div>
+    </div>
+
+    <div class="card" data-category="interview" data-id="figma-cro-sales" onclick="openArticle(this)">
+      <div class="card-top">
+        <span class="card-cat cat-interview">深度访谈</span>
+        <span class="card-channel">20VC</span>
+        <span class="card-dot">/</span>
+        <span class="card-duration">约65分钟</span>
+        <span class="card-dot">/</span>
+        <span class="card-date">2026-03-21</span>
+      </div>
+      <h3>Figma CRO的反直觉销售哲学：为什么我不信配额</h3>
+      <p class="card-summary">Figma CRO 拆解三层销售结构、无传统CS的组织设计、"配额是虚构的"背后的真实含义，以及AI销售工具的市场机会。</p>
+      <div class="card-tags">
+        <span class="card-tag">Figma</span>
+        <span class="card-tag">Sales</span>
+        <span class="card-tag">PLG</span>
+        <span class="card-tag">SaaS</span>
+        <span class="card-tag">产品增长</span>
+      </div>
+      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 20VC with Harry Stebbings</div>
+    </div>
+
+    <div class="card" data-category="debate" data-id="20vc-nvidia-gtc-anduril" onclick="openArticle(this)">
+      <div class="card-top">
+        <span class="card-cat cat-debate">圆桌激辩</span>
+        <span class="card-channel">20VC</span>
+        <span class="card-dot">/</span>
+        <span class="card-duration">约78分钟</span>
+        <span class="card-dot">/</span>
+        <span class="card-date">2026-03-19</span>
+      </div>
+      <h3>NVIDIA万亿收入预测、Anduril $200亿合同、裁员潮与AI流利度新标准</h3>
+      <p class="card-summary">GTC万亿预测为何没撼动股价、五种裁员逻辑背后的方向、Anduril从试用到主导供应商、种子基金的结构性困境。</p>
+      <div class="card-tags">
+        <span class="card-tag">NVIDIA</span>
+        <span class="card-tag">GTC</span>
+        <span class="card-tag">Anduril</span>
+        <span class="card-tag">裁员</span>
+        <span class="card-tag">AI流利度</span>
+      </div>
+      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 20VC with Harry Stebbings</div>
+    </div>
+
+    <div class="card" data-category="tech" data-id="yc-ai-builders" onclick="openArticle(this)">
+      <div class="card-top">
+        <span class="card-cat cat-tech">技术解析</span>
+        <span class="card-channel">Lightcone (YC)</span>
+        <span class="card-dot">/</span>
+        <span class="card-duration">约40分钟</span>
+        <span class="card-dot">/</span>
+        <span class="card-date">2026-03-16</span>
+      </div>
+      <h3>AI正在解锁数百万新创造者：YC看到的创业新范式</h3>
+      <p class="card-summary">YC投资的Emergent团队分享：8个月700万应用的增长数据、非技术用户平台的转型、SaaS的两大冲击与域专家创业的机会。</p>
+      <div class="card-tags">
+        <span class="card-tag">YC</span>
+        <span class="card-tag">Vibe Coding</span>
+        <span class="card-tag">Agent</span>
+        <span class="card-tag">非技术创业</span>
+        <span class="card-tag">SWE-Bench</span>
+      </div>
+      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 Lightcone Podcast (Y Combinator)</div>
+    </div>
+
+    <div class="card" data-category="interview" data-id="simon-last-notion-ai" onclick="openArticle(this)">
+      <div class="card-top">
+        <span class="card-cat cat-interview">深度访谈</span>
+        <span class="card-channel">No Priors</span>
+        <span class="card-dot">/</span>
+        <span class="card-duration">约29分钟</span>
+        <span class="card-dot">/</span>
+        <span class="card-date">2026-03-12</span>
+      </div>
+      <h3>Notion核心人物Simon Last：从笔记应用到AI工作空间的转型内幕</h3>
+      <p class="card-summary">Simon Last 拆解Notion AI演进全路径：从GPT-4内测到自定义Agent落地，以及"定期重写harness"的产品哲学。</p>
+      <div class="card-tags">
+        <span class="card-tag">Notion</span>
+        <span class="card-tag">AI Workspace</span>
+        <span class="card-tag">Agent</span>
+        <span class="card-tag">产品转型</span>
+      </div>
+      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 No Priors Podcast</div>
+    </div>
+
+    <div class="card" data-category="interview" data-id="cursor-not-dead" onclick="openArticle(this)">
+      <div class="card-top">
+        <span class="card-cat cat-interview">深度访谈</span>
+        <span class="card-channel">20VC</span>
+        <span class="card-dot">/</span>
+        <span class="card-duration">约64分钟</span>
+        <span class="card-dot">/</span>
+        <span class="card-date">2026-03-09</span>
+      </div>
+      <h3>"Cursor已死"纯属扯淡：Accel投资人用数据反驳AI编程工具末日论</h3>
+      <p class="card-summary">Accel投资人Miles Clements用真实数据反驳"Cursor已死"论：agent占比、增速、PR归因，以及AI时代SaaS颠覆的投资框架。</p>
+      <div class="card-tags">
+        <span class="card-tag">Cursor</span>
+        <span class="card-tag">Accel</span>
+        <span class="card-tag">AI编程</span>
+        <span class="card-tag">SaaS</span>
+        <span class="card-tag">投资</span>
+      </div>
+      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 20VC with Harry Stebbings</div>
+    </div>
+
+    <div class="card" data-category="interview" data-id="jenny-wen-claude-design" onclick="openArticle(this)">
+      <div class="card-top">
+        <span class="card-cat cat-interview">深度访谈</span>
+        <span class="card-channel">Lenny's Podcast</span>
+        <span class="card-dot">/</span>
+        <span class="card-duration">约77分钟</span>
+        <span class="card-dot">/</span>
+        <span class="card-date">2026-03-01</span>
+      </div>
+      <h3>Claude设计负责人Jenny Wen：设计流程已死，AI原生产品的新做法</h3>
+      <p class="card-summary">Anthropic设计负责人拆解AI原生产品设计逻辑：发布节奏为何变了、Legibility框架找机会、Claude Co-work的真实诞生过程。</p>
+      <div class="card-tags">
+        <span class="card-tag">Anthropic</span>
+        <span class="card-tag">Claude</span>
+        <span class="card-tag">设计</span>
+        <span class="card-tag">AI产品</span>
+        <span class="card-tag">Legibility</span>
+      </div>
+      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 Lenny's Podcast</div>
+    </div>
+
+    <div class="card" data-category="interview" data-id="monday-saas-dead" onclick="openArticle(this)">
+      <div class="card-top">
+        <span class="card-cat cat-interview">深度访谈</span>
+        <span class="card-channel">20VC</span>
+        <span class="card-dot">/</span>
+        <span class="card-duration">约74分钟</span>
+        <span class="card-dot">/</span>
+        <span class="card-date">2026-03-02</span>
+      </div>
+      <h3>Monday.com CEO：SaaS是否已死？Vibe Coding会颠覆一切吗？</h3>
+      <p class="card-summary">Monday.com CEO Eran Zinman拆解SaaS末日论三个版本、AI原生vs bolt-on的护城河差异、用AI替换SDR的实战经验。</p>
+      <div class="card-tags">
+        <span class="card-tag">Monday.com</span>
+        <span class="card-tag">SaaS</span>
+        <span class="card-tag">Vibe Coding</span>
+        <span class="card-tag">AI转型</span>
+        <span class="card-tag">定价</span>
+      </div>
+      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 20VC with Harry Stebbings</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// Init UI
+{
+  const h = new Date().getHours();
+  let g = '早上好'; if (h >= 12 && h < 18) g = '下午好'; else if (h >= 18) g = '晚上好';
+  const greetEl = document.getElementById('greetingText');
+  if (greetEl) greetEl.textContent = g;
+}
+
+function filterCards(el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const cat = el.dataset.cat;
+  document.querySelectorAll('.feed > .card').forEach(card => {
+    if (cat === 'all' || (card.dataset.category && card.dataset.category.includes(cat))) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+}
+
+// Dropdown
+function toggleDropdown() { document.getElementById('dropdown').classList.toggle('show'); }
+document.addEventListener('click', e => {
+  if (!e.target.closest('.user-menu')) document.getElementById('dropdown').classList.remove('show');
+});
+
+// Open article
+function openArticle(el) {
+  const id = el.dataset.id;
+  if (id) window.open('article.html?id=' + id, '_blank');
+}
+
+// Toast
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show';
+  setTimeout(() => t.className = 'toast', 2000);
+}
+</script>
+</body>
+</html>

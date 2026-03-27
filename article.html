@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIGNAL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+:root {
+  --bg: #ffffff; --bg-alt: #fafafa; --bg-card: #ffffff;
+  --bg-hover: #f5f5f5;
+  --border: #ddd; --border-hover: #bbb;
+  --text: #1e1e1e; --text-dim: #6a737d; --text-muted: #959da5;
+  --accent: #6f42c1; --accent-dim: rgba(111,66,193,0.08);
+  --keyword: #d73a49; --string: #22863a; --func: #005cc5;
+  --type: #e36209; --comment: #6a737d; --const: #6f42c1;
+  --pixel: 'Press Start 2P', monospace;
+  --mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --sans: 'Space Grotesk', -apple-system, 'PingFang SC', sans-serif;
+}
+body {
+  font-family: var(--sans); color: var(--text); background: var(--bg-alt);
+  line-height: 1.6; -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+::selection { background: var(--accent); color: #fff; }
+
+/* ===== Nav ===== */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(20px);
+  border-bottom: 2px dotted var(--border); height: 56px;
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px; max-width: 900px; margin: 0 auto; padding: 0 24px;
+}
+.nav-left { display: flex; align-items: center; gap: 16px; }
+.nav-logo {
+  font-family: var(--pixel); font-size: 11px; font-weight: 400;
+  letter-spacing: 1px; cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+}
+.nav-logo .dot { width: 8px; height: 8px; background: var(--accent); }
+.back-btn {
+  font-family: var(--mono); font-size: 13px; color: var(--text-dim);
+  background: none; border: 2px dotted var(--border); padding: 6px 14px;
+  cursor: pointer; transition: all 0.15s; border-radius: 0;
+}
+.back-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ===== Article ===== */
+.article-wrap {
+  max-width: 760px; margin: 0 auto; padding: 80px 24px 60px;
+}
+
+/* Video info header */
+.video-info {
+  background: var(--bg-card); border: 2px dotted var(--border); padding: 20px;
+  margin-bottom: 28px; border-radius: 2px;
+}
+.video-info-row {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.video-cat {
+  font-family: var(--pixel); font-size: 7px; padding: 3px 8px;
+  font-weight: 400; letter-spacing: 0.5px; text-transform: uppercase;
+}
+.cat-interview { background: rgba(215,58,73,0.07); color: #d73a49; border: 1px solid #d73a49; }
+.cat-keynote { background: rgba(0,92,197,0.07); color: #005cc5; border: 1px solid #005cc5; }
+.cat-debate { background: rgba(227,98,9,0.07); color: #e36209; border: 1px solid #e36209; }
+.cat-tech { background: rgba(34,134,58,0.07); color: #22863a; border: 1px solid #22863a; }
+.video-channel {
+  font-family: var(--mono); font-size: 12px; color: var(--accent); font-weight: 600;
+}
+.video-dot { color: var(--text-muted); font-size: 10px; }
+.video-duration {
+  font-family: var(--mono); font-size: 11px; color: var(--text-muted);
+  background: var(--bg-alt); padding: 2px 8px; border: 1px dotted var(--border);
+}
+.video-date { font-family: var(--mono); font-size: 12px; color: var(--text-muted); }
+.video-source-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 12px; color: var(--accent);
+  border-bottom: 1px dotted var(--accent); padding-bottom: 1px;
+}
+.video-source-link:hover { opacity: 0.7; }
+.video-source-link .yt-icon { color: #d73a49; }
+
+.article-title {
+  font-family: var(--sans); font-size: 28px; font-weight: 700;
+  line-height: 1.4; letter-spacing: -0.5px; margin-bottom: 12px;
+}
+.article-summary {
+  font-size: 15px; color: var(--text-dim); line-height: 1.8;
+  margin-bottom: 28px; padding-bottom: 28px; border-bottom: 2px dotted var(--border);
+}
+
+.article-body {}
+
+/* Article content typography */
+.article-body h2 {
+  font-family: var(--sans); font-size: 20px; font-weight: 700;
+  margin: 36px 0 16px; letter-spacing: -0.3px;
+  padding-left: 12px; border-left: 3px solid var(--accent);
+}
+.article-body h3 {
+  font-family: var(--sans); font-size: 16px; font-weight: 700;
+  margin: 28px 0 12px; color: var(--text);
+}
+.article-body p {
+  font-size: 15px; line-height: 1.8; color: var(--text-dim);
+  margin-bottom: 16px;
+}
+.article-body ul, .article-body ol {
+  margin: 12px 0 20px 20px;
+}
+.article-body li {
+  font-size: 14px; line-height: 1.8; color: var(--text-dim);
+  margin-bottom: 8px;
+}
+.article-body strong { color: var(--text); font-weight: 600; }
+.article-body blockquote {
+  border-left: 3px solid var(--accent); padding: 12px 16px; margin: 20px 0;
+  background: var(--accent-dim); font-size: 14px; color: var(--text-dim);
+  line-height: 1.7;
+}
+.article-body .term-box {
+  margin: 16px 0; padding: 14px 16px; border-radius: 2px;
+  background: var(--bg-alt); border: 1px dotted var(--border);
+  font-size: 13px; line-height: 1.7; color: var(--text-dim);
+}
+.article-body .term-box .term-label {
+  font-family: var(--pixel); font-size: 7px; color: var(--accent);
+  letter-spacing: 0.5px; text-transform: uppercase; margin-right: 8px;
+  background: var(--accent-dim); padding: 2px 6px; border: 1px dotted var(--accent);
+  vertical-align: middle;
+}
+.article-body .term-box .term-name {
+  font-family: var(--mono); font-weight: 700; color: var(--text);
+}
+
+/* Tags */
+.article-tags {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-top: 32px;
+  padding-top: 24px; border-top: 2px dotted var(--border);
+}
+.article-tag {
+  font-family: var(--mono); font-size: 11px; padding: 4px 10px;
+  background: var(--bg-alt); color: var(--text-dim);
+  border: 1px dotted var(--border); letter-spacing: 0.3px;
+}
+
+/* Source footer */
+.article-footer {
+  margin-top: 40px; padding: 20px; border: 2px dotted var(--border);
+  background: var(--bg-card); text-align: center;
+}
+.article-footer p {
+  font-family: var(--mono); font-size: 12px; color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.article-footer a {
+  font-family: var(--mono); font-size: 12px; color: var(--accent);
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.article-footer a:hover { text-decoration: underline; }
+
+/* Not found */
+.not-found { text-align: center; padding: 120px 24px; }
+.not-found h2 {
+  font-family: var(--pixel); font-size: 14px; margin-bottom: 16px;
+  color: var(--text-muted);
+}
+.not-found p { font-size: 14px; color: var(--text-dim); }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .article-title { font-size: 22px; }
+  .article-body h2 { font-size: 18px; }
+  .article-wrap { padding: 72px 16px 40px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <div class="nav-logo" onclick="window.location.href='app.html'">
+        <span class="dot"></span> SIGNAL
+      </div>
+    </div>
+    <button class="back-btn" onclick="history.back()">← 返回</button>
+  </div>
+</nav>
+
+<div class="article-wrap" id="articleWrap">
+  <!-- Content injected by JS -->
+</div>
+
+<script src="articles-data.js"></script>
+<script>
+// Simple markdown-ish to HTML converter
+function md2html(md) {
+  let html = md
+    .replace(/^【名词解释】(.+?)[:：]\s*(.+)$/gm, '<div class="term-box"><span class="term-label">名词解释</span> <span class="term-name">$1</span>：$2</div>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+    .replace(/^(?!<[hbluto]|<tr|<li|<div)(.+)$/gm, '<p>$1</p>')
+    .replace(/<\/blockquote>\n<blockquote>/g, '<br>')
+    .replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>')
+    .replace(/<p><\/p>/g, '')
+    .replace(/<p>---<\/p>/g, '<div style="border-top:2px dotted var(--border);margin:28px 0;"></div>')
+    .replace(/<p>\s*\*(.+)\*\s*<\/p>/g, '<p><em>$1</em></p>');
+  return html;
+}
+
+// Render article
+const params = new URLSearchParams(window.location.search);
+const id = params.get('id');
+const article = articles[id];
+const wrap = document.getElementById('articleWrap');
+
+if (!article) {
+  wrap.innerHTML = `<div class="not-found"><h2>404 — NOT FOUND</h2><p>内容不存在或已下线</p><br><button class="back-btn" onclick="window.location.href='app.html'">返回首页</button></div>`;
+} else {
+  document.title = article.title + ' — SIGNAL';
+  const catClass = 'cat-' + article.category;
+  wrap.innerHTML = `
+    <div class="video-info">
+      <div class="video-info-row">
+        <span class="video-cat ${catClass}">${article.catLabel}</span>
+        <span class="video-channel">${article.channelName || article.source}</span>
+        <span class="video-dot">/</span>
+        <span class="video-duration">${article.duration || ''}</span>
+        <span class="video-dot">/</span>
+        <span class="video-date">${article.date}</span>
+      </div>
+      <a class="video-source-link" href="${article.sourceUrl}" target="_blank" rel="noopener">
+        <span class="yt-icon">▶</span> 观看原视频 ↗
+      </a>
+    </div>
+    <h1 class="article-title">${article.title}</h1>
+    <p class="article-summary">${article.summary || ''}</p>
+    <div class="article-body">${md2html(article.content)}</div>
+    <div class="article-tags">${article.tags.map(t => `<span class="article-tag">${t}</span>`).join('')}</div>
+    <div class="article-footer">
+      <p>内容来源：${article.source}</p>
+      <a href="${article.sourceUrl}" target="_blank" rel="noopener"><span class="yt-icon">▶</span> 观看原视频 ↗</a>
+    </div>
+  `;
+}
+</script>
+</body>
+</html>

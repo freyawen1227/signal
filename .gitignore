@@ -1,0 +1,13 @@
+.env
+node_modules/
+venv/
+transcripts/
+logs/
+data/
+.claude/
+.DS_Store
+*.pyc
+__pycache__/
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+Untitled

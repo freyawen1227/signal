@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIGNAL — AI 播客解读平台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+:root {
+  --bg: #ffffff; --bg-alt: #fafafa; --bg-card: #ffffff;
+  --bg-hover: #f5f5f5;
+  --border: #ddd; --border-hover: #bbb;
+  --text: #1e1e1e; --text-dim: #6a737d; --text-muted: #959da5;
+  --accent: #6f42c1; --accent-dim: rgba(111,66,193,0.08);
+  --keyword: #d73a49; --string: #22863a; --func: #005cc5;
+  --type: #e36209; --comment: #6a737d; --const: #6f42c1;
+  --mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --sans: 'Space Grotesk', -apple-system, 'PingFang SC', sans-serif;
+}
+body {
+  font-family: var(--sans); color: var(--text); background: var(--bg);
+  line-height: 1.6; -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+::selection { background: var(--accent); color: #fff; }
+
+/* ===== Nav ===== */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(20px);
+  border-bottom: 2px dotted var(--border); height: 56px;
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px; max-width: 960px; margin: 0 auto; padding: 0 24px;
+}
+.nav-logo {
+  font-family: var(--mono); font-size: 13px; font-weight: 700;
+  letter-spacing: 1px;
+  display: flex; align-items: center; gap: 8px;
+}
+.nav-logo .dot {
+  width: 8px; height: 8px; background: var(--accent);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+.nav-right { display: flex; gap: 16px; align-items: center; }
+.nav-right a {
+  font-family: var(--mono); font-size: 12px; color: var(--text-dim); font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-right a:hover { color: var(--accent); }
+.nav-cta {
+  background: var(--accent); color: #fff; padding: 7px 18px; border-radius: 2px;
+  font-family: var(--mono); font-size: 12px; font-weight: 600; border: none; cursor: pointer;
+  transition: all 0.2s; letter-spacing: 0.5px;
+}
+.nav-cta:hover { box-shadow: 0 0 0 3px var(--accent-dim); }
+
+/* ===== Hero ===== */
+.hero {
+  padding: 130px 0 72px; position: relative; overflow: hidden;
+  border-bottom: 2px dotted var(--border); background: var(--bg-alt);
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(circle, #ddd 1px, transparent 1px);
+  background-size: 24px 24px; opacity: 0.4;
+}
+.hero-inner {
+  position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 0 24px;
+}
+.hero h1 {
+  font-family: var(--sans); font-size: 44px; font-weight: 700;
+  line-height: 1.2; letter-spacing: -1px; margin-bottom: 20px; max-width: 600px;
+}
+.hero h1 .hl { color: var(--accent); }
+.hero .subtitle {
+  font-size: 16px; color: var(--text-dim); max-width: 520px;
+  margin-bottom: 32px; line-height: 1.75;
+}
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 48px; }
+.btn-primary {
+  background: var(--accent); color: #fff; padding: 13px 28px; border-radius: 2px;
+  font-family: var(--mono); font-size: 13px; font-weight: 600; border: none; cursor: pointer;
+  transition: all 0.2s; letter-spacing: 0.5px;
+}
+.btn-primary:hover { box-shadow: 0 0 0 4px var(--accent-dim); transform: translateY(-1px); }
+.btn-ghost {
+  background: transparent; color: var(--text); padding: 13px 28px; border-radius: 2px;
+  font-family: var(--mono); font-size: 13px; font-weight: 600;
+  border: 2px dotted var(--border); cursor: pointer; transition: all 0.2s;
+}
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Source strip in hero */
+.source-strip {
+  border-top: 2px dotted var(--border); padding-top: 28px;
+}
+.source-strip-label {
+  font-family: var(--mono); font-size: 11px; color: var(--text-muted);
+  letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px;
+}
+.source-strip-list {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.source-chip {
+  font-family: var(--mono); font-size: 12px; font-weight: 600;
+  padding: 6px 14px; border: 1px dotted var(--border); background: var(--bg-card);
+  color: var(--text-dim); transition: all 0.15s;
+}
+.source-chip:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ===== Value Props ===== */
+.values {
+  padding: 64px 0; border-bottom: 2px dotted var(--border);
+}
+.values-inner {
+  max-width: 960px; margin: 0 auto; padding: 0 24px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;
+}
+.val-item {}
+.val-num {
+  font-family: var(--mono); font-size: 32px; font-weight: 800; color: var(--accent);
+  margin-bottom: 12px; line-height: 1;
+}
+.val-title {
+  font-size: 18px; font-weight: 700; margin-bottom: 6px;
+}
+.val-desc {
+  font-size: 14px; color: var(--text-dim); line-height: 1.7;
+}
+
+/* ===== Latest ===== */
+.latest {
+  padding: 64px 0; background: var(--bg-alt);
+  border-bottom: 2px dotted var(--border);
+}
+.latest-inner {
+  max-width: 960px; margin: 0 auto; padding: 0 24px;
+}
+.latest-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 24px;
+}
+.latest-header h2 {
+  font-size: 24px; font-weight: 700; letter-spacing: -0.3px;
+}
+.latest-header a {
+  font-family: var(--mono); font-size: 12px; color: var(--accent); font-weight: 600;
+}
+.latest-grid {
+  display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding-bottom: 12px; -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.latest-grid::-webkit-scrollbar { height: 6px; }
+.latest-grid::-webkit-scrollbar-track { background: transparent; }
+.latest-grid::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.latest-grid::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+.latest-card {
+  background: var(--bg-card); border: 2px dotted var(--border); padding: 22px;
+  transition: all 0.2s; min-width: 300px; max-width: 300px; flex-shrink: 0;
+  scroll-snap-align: start;
+}
+.latest-card:hover { border-color: var(--accent); }
+.lc-meta {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;
+}
+.lc-cat {
+  font-family: var(--mono); font-size: 10px; padding: 3px 8px;
+  letter-spacing: 0.5px; text-transform: uppercase; font-weight: 600;
+}
+.cat-interview { background: rgba(215,58,73,0.07); color: #d73a49; border: 1px solid #d73a49; }
+.cat-debate { background: rgba(227,98,9,0.07); color: #e36209; border: 1px solid #e36209; }
+.cat-tech { background: rgba(34,134,58,0.07); color: #22863a; border: 1px solid #22863a; }
+.lc-channel {
+  font-family: var(--mono); font-size: 11px; color: var(--accent); font-weight: 600;
+}
+.lc-date {
+  font-family: var(--mono); font-size: 11px; color: var(--text-muted);
+}
+.latest-card h3 {
+  font-size: 15px; font-weight: 700; line-height: 1.5; margin-bottom: 8px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.latest-card p {
+  font-size: 13px; color: var(--text-dim); line-height: 1.6;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+/* ===== Footer ===== */
+.footer {
+  border-top: 2px dotted var(--border); padding: 32px 0 20px; background: var(--bg-alt);
+}
+.footer-inner {
+  max-width: 960px; margin: 0 auto; padding: 0 24px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-brand {
+  font-family: var(--mono); font-size: 13px; font-weight: 700; letter-spacing: 1px;
+  display: flex; align-items: center; gap: 8px;
+}
+.footer-brand::before { content: ''; display: inline-block; width: 8px; height: 8px; background: var(--accent); }
+.footer-right {
+  font-family: var(--mono); font-size: 11px; color: var(--text-muted);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .hero h1 { font-size: 30px; }
+  .values-inner { grid-template-columns: 1fr; gap: 28px; }
+  .latest-card { min-width: 260px; max-width: 260px; }
+  .source-strip-list { gap: 6px; }
+  .source-chip { font-size: 11px; padding: 5px 10px; }
+  .nav-right a { display: none; }
+  .footer-inner { flex-direction: column; gap: 12px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo"><span class="dot"></span>SIGNAL</div>
+    <div class="nav-right">
+      <button class="nav-cta" onclick="window.location.href='app.html'">进入阅读 →</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-inner">
+    <h1>AI播客<span class="hl">收录站</span></h1>
+    <p class="subtitle">YouTube 上最有价值的 AI 播客，我们帮你看完、翻译、深度解读。不用翻墙、不用听英文——打开即读，加速你的行业理解。</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="window.location.href='app.html'">开始阅读 →</button>
+      <button class="btn-ghost" onclick="document.getElementById('latest').scrollIntoView({behavior:'smooth'})">看看最新解读 ↓</button>
+    </div>
+    <div class="source-strip">
+      <div class="source-strip-label">收录频道</div>
+      <div class="source-strip-list">
+        <span class="source-chip">Lex Fridman</span>
+        <span class="source-chip">All-In Podcast</span>
+        <span class="source-chip">20VC</span>
+        <span class="source-chip">No Priors</span>
+        <span class="source-chip">BG2 Pod</span>
+        <span class="source-chip">Lenny's Podcast</span>
+        <span class="source-chip">Lightcone (YC)</span>
+        <span class="source-chip">Logan Bartlett</span>
+        <span class="source-chip" style="color:var(--text-muted);border-color:transparent;background:none;">更多持续收录中…</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Value Props -->
+<section class="values">
+  <div class="values-inner">
+    <div class="val-item">
+      <div class="val-num">中文</div>
+      <div class="val-title">母语深度解读</div>
+      <div class="val-desc">不是机翻摘要。英文播客按逻辑重组为中文长文，专业术语逐一解释，零门槛理解硅谷对话。</div>
+    </div>
+    <div class="val-item">
+      <div class="val-num">10min</div>
+      <div class="val-title">结构化精华提炼</div>
+      <div class="val-desc">每篇文章：总结 → 核心洞察 → 全文意译。通勤扫一眼总结，有空再读全文。</div>
+    </div>
+    <div class="val-item">
+      <div class="val-num">0 墙</div>
+      <div class="val-title">打开即读</div>
+      <div class="val-desc">不需要 VPN、不需要 YouTube、不需要听英文。所有内容已就绪，随时随地获取。</div>
+    </div>
+  </div>
+</section>
+
+<!-- Latest Articles -->
+<section class="latest" id="latest">
+  <div class="latest-inner">
+    <div class="latest-header">
+      <h2>最新解读</h2>
+      <a href="app.html">查看全部 →</a>
+    </div>
+    <div class="latest-grid">
+      <div class="latest-card">
+        <div class="lc-meta">
+          <span class="lc-cat cat-interview">深度访谈</span>
+          <span class="lc-channel">Lex Fridman</span>
+          <span class="lc-date">03-23</span>
+        </div>
+        <h3>黄仁勋最新深度访谈：从洗碗工到3万亿美元帝国掌舵人的思维操作系统</h3>
+        <p>CUDA的豪赌、极端协同设计哲学、AI四大扩展定律，以及"光速思维"方法论。</p>
+      </div>
+      <div class="latest-card">
+        <div class="lc-meta">
+          <span class="lc-cat cat-debate">圆桌激辩</span>
+          <span class="lc-channel">All-In Podcast</span>
+          <span class="lc-date">03-23</span>
+        </div>
+        <h3>四位AI CEO的GTC对话：算力、产品、开源与能源的终极博弈</h3>
+        <p>Perplexity、Together AI、Mistral、Nebius CEO同台辩论AI竞争格局。</p>
+      </div>
+      <div class="latest-card">
+        <div class="lc-meta">
+          <span class="lc-cat cat-interview">深度访谈</span>
+          <span class="lc-channel">20VC</span>
+          <span class="lc-date">03-21</span>
+        </div>
+        <h3>Figma CRO的反直觉销售哲学：为什么我不信配额</h3>
+        <p>三层销售结构、无传统CS的组织设计、"配额是虚构的"背后的真实含义。</p>
+      </div>
+      <div class="latest-card">
+        <div class="lc-meta">
+          <span class="lc-cat cat-tech">技术解析</span>
+          <span class="lc-channel">No Priors</span>
+          <span class="lc-date">03-20</span>
+        </div>
+        <h3>Karpathy深度访谈：代码智能体、自动化科研，以及AI的"循环时代"</h3>
+        <p>从Eureka实验室到代码Agent，Karpathy眼中的AI下一个突破方向。</p>
+      </div>
+      <div class="latest-card">
+        <div class="lc-meta">
+          <span class="lc-cat cat-interview">深度访谈</span>
+          <span class="lc-channel">All-In Podcast</span>
+          <span class="lc-date">03-19</span>
+        </div>
+        <h3>黄仁勋GTC大会深度对话：推理爆炸、Agent革命与AI的万亿美元未来</h3>
+        <p>GTC现场实录，黄仁勋与四大嘴炮面对面聊AI基础设施的终局。</p>
+      </div>
+      <div class="latest-card">
+        <div class="lc-meta">
+          <span class="lc-cat cat-tech">技术解析</span>
+          <span class="lc-channel">Lightcone (YC)</span>
+          <span class="lc-date">03-16</span>
+        </div>
+        <h3>AI正在解锁数百万新创造者：YC看到的创业新范式</h3>
+        <p>YC合伙人解读AI时代创业门槛降低后的新机会与新挑战。</p>
+      </div>
+      <div class="latest-card">
+        <div class="lc-meta">
+          <span class="lc-cat cat-interview">深度访谈</span>
+          <span class="lc-channel">No Priors</span>
+          <span class="lc-date">03-12</span>
+        </div>
+        <h3>Notion核心人物Simon Last：从笔记应用到AI工作空间的转型内幕</h3>
+        <p>Notion如何把AI从功能变成产品核心，以及内部团队的转型阵痛。</p>
+      </div>
+      <div class="latest-card">
+        <div class="lc-meta">
+          <span class="lc-cat cat-interview">深度访谈</span>
+          <span class="lc-channel">Lenny's Podcast</span>
+          <span class="lc-date">03-01</span>
+        </div>
+        <h3>Claude设计负责人Jenny Wen：设计流程已死，AI原生产品的新做法</h3>
+        <p>AI原生产品设计逻辑、Legibility框架、Claude Co-work的真实诞生过程。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">SIGNAL</div>
+    <div class="footer-right">© 2026 SIGNAL · Built for AI Entrepreneurs</div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>登录 — SIGNAL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #ffffff; --bg-alt: #fafafa; --bg-card: #ffffff;
+  --bg-hover: #f5f5f5;
+  --border: #ddd; --border-hover: #bbb; --border-focus: #999;
+  --text: #1e1e1e; --text-dim: #6a737d; --text-muted: #959da5;
+  --accent: #6f42c1; --accent-dim: rgba(111,66,193,0.08);
+  --keyword: #d73a49; --string: #22863a; --func: #005cc5;
+  --type: #e36209; --comment: #6a737d; --const: #6f42c1;
+  --pixel: 'Press Start 2P', monospace;
+  --mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --sans: 'Space Grotesk', -apple-system, 'PingFang SC', sans-serif;
+}
+body {
+  font-family: var(--sans); color: var(--text); background: var(--bg);
+  line-height: 1.6; -webkit-font-smoothing: antialiased;
+  min-height: 100vh; display: flex; flex-direction: column;
+}
+a { text-decoration: none; color: inherit; }
+::selection { background: var(--accent); color: #fff; }
+
+/* Page */
+.page {
+  flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px;
+  position: relative; overflow: hidden; background: var(--bg-alt);
+}
+
+/* Dot pattern bg */
+.page::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(circle, #ddd 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.5;
+}
+
+/* Card */
+.auth-wrapper { position: relative; z-index: 1; width: 100%; max-width: 400px; }
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 12px; color: var(--text-muted);
+  margin-bottom: 20px; transition: color 0.2s;
+}
+.back-link:hover { color: var(--accent); }
+.back-link svg { width: 14px; height: 14px; }
+
+.auth-card {
+  background: var(--bg-card); border-radius: 2px; padding: 32px;
+  border: 2px dotted var(--border);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+}
+.auth-logo {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--pixel); font-size: 11px; font-weight: 400;
+  letter-spacing: 1px; margin-bottom: 4px;
+}
+.auth-logo .dot {
+  width: 8px; height: 8px; background: var(--accent);
+}
+.auth-subtitle {
+  font-family: var(--mono); font-size: 11px; color: var(--text-muted); margin-bottom: 28px;
+}
+
+/* Tabs */
+.auth-tabs { display: flex; gap: 0; margin-bottom: 24px; border-bottom: 2px dotted var(--border); }
+.auth-tab {
+  flex: 1; padding: 10px 0; text-align: center;
+  font-family: var(--pixel); font-size: 9px; font-weight: 400;
+  color: var(--text-muted); cursor: pointer; transition: all 0.2s;
+  border: none; background: none; border-bottom: 2px solid transparent; margin-bottom: -2px;
+  letter-spacing: 0.5px;
+}
+.auth-tab:hover { color: var(--text-dim); }
+.auth-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* Forms */
+.auth-form { display: none; }
+.auth-form.active { display: block; }
+.form-group { margin-bottom: 16px; }
+.form-label {
+  display: block; font-family: var(--pixel); font-size: 8px; font-weight: 400;
+  color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.form-input {
+  width: 100%; padding: 10px 14px; border-radius: 2px;
+  border: 2px dotted var(--border); font-size: 14px; color: var(--text);
+  transition: all 0.2s; outline: none; background: var(--bg-alt);
+  font-family: var(--sans);
+}
+.form-input:focus { border-color: var(--accent); border-style: solid; box-shadow: 0 0 0 2px var(--accent-dim); }
+.form-input::placeholder { color: var(--text-muted); }
+select.form-input { cursor: pointer; }
+select.form-input option { background: var(--bg-card); }
+
+.form-row {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+}
+.form-check {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 11px; color: var(--text-dim); cursor: pointer;
+}
+.form-check input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--accent); cursor: pointer; }
+.form-forgot { font-family: var(--mono); font-size: 11px; color: var(--accent); }
+.form-forgot:hover { text-decoration: underline; }
+
+.form-submit {
+  width: 100%; padding: 12px; border-radius: 2px;
+  font-family: var(--pixel); font-size: 10px; font-weight: 400;
+  border: none; cursor: pointer; transition: all 0.2s;
+  background: var(--accent); color: #fff; letter-spacing: 0.5px;
+}
+.form-submit:hover { box-shadow: 0 0 0 3px var(--accent-dim); }
+.form-submit:active { transform: scale(0.99); }
+
+/* Divider */
+.divider {
+  display: flex; align-items: center; gap: 14px; margin: 20px 0;
+  font-family: var(--pixel); font-size: 8px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 1px;
+}
+.divider::before, .divider::after { content: ''; flex: 1; height: 0; border-top: 2px dotted var(--border); }
+
+/* Social */
+.social-btns { display: flex; gap: 10px; }
+.social-btn {
+  flex: 1; padding: 10px; border-radius: 2px; border: 2px dotted var(--border);
+  background: transparent; cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--text-dim);
+}
+.social-btn:hover { border-color: var(--accent); color: var(--text); }
+.social-btn svg { width: 18px; height: 18px; }
+
+/* Terms */
+.auth-terms {
+  text-align: center; font-family: var(--mono); font-size: 10px;
+  color: var(--text-muted); margin-top: 16px; line-height: 1.6;
+}
+.auth-terms a { color: var(--accent); }
+.auth-terms a:hover { text-decoration: underline; }
+
+/* Toast */
+.toast {
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+  background: var(--bg-card); color: var(--text); padding: 10px 20px; border-radius: 2px;
+  font-family: var(--mono); font-size: 12px; font-weight: 600; z-index: 1000;
+  transition: transform 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border: 2px dotted var(--border);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.error { border-color: var(--accent); border-style: solid; }
+
+/* Footer */
+.page-footer {
+  text-align: center; padding: 16px;
+  font-family: var(--mono); font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px;
+}
+
+@media (max-width: 480px) {
+  .auth-card { padding: 24px 18px; }
+  .social-btns { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div class="page">
+  <div class="auth-wrapper">
+    <a href="product-preview.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      ← BACK
+    </a>
+
+    <div class="auth-card">
+      <div class="auth-logo"><span class="dot"></span>SIGNAL</div>
+      <p class="auth-subtitle">// 每天 5 分钟，掌握 AI 行业全貌</p>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login" onclick="switchAuthTab('login')">LOGIN</button>
+        <button class="auth-tab" data-tab="register" onclick="switchAuthTab('register')">REGISTER</button>
+      </div>
+
+      <!-- Login -->
+      <form class="auth-form active" id="form-login" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" id="login-email" placeholder="you@example.com" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+        <div class="form-row">
+          <label class="form-check"><input type="checkbox" checked> 记住我</label>
+          <a href="#" class="form-forgot">忘记密码?</a>
+        </div>
+        <button type="submit" class="form-submit">LOGIN →</button>
+        <div class="divider">or</div>
+        <div class="social-btns">
+          <button type="button" class="social-btn" onclick="socialLogin('google')">
+            <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            Google
+          </button>
+          <button type="button" class="social-btn" onclick="socialLogin('wechat')">
+            <svg viewBox="0 0 24 24" fill="#07C160"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.534c0 2.22 1.174 4.215 3.016 5.607l-.752 2.264 2.628-1.346c.898.258 1.853.4 2.849.4.324 0 .643-.018.958-.049a5.1 5.1 0 01-.211-1.455c0-3.57 3.368-6.467 7.512-6.467.26 0 .515.013.767.036C16.07 4.948 12.697 2.188 8.691 2.188zM5.745 6.74a1.09 1.09 0 110 2.18 1.09 1.09 0 010-2.18zm5.892 0a1.09 1.09 0 110 2.18 1.09 1.09 0 010-2.18z"/><path d="M24 14.955c0-3.31-3.368-5.993-7.512-5.993-4.146 0-7.513 2.683-7.513 5.993s3.367 5.993 7.513 5.993c.882 0 1.728-.14 2.512-.393l2.124 1.088-.608-1.83C22.932 18.68 24 16.926 24 14.955zm-9.946-1.1a.876.876 0 110 1.752.876.876 0 010-1.752zm4.868 0a.876.876 0 110 1.752.876.876 0 010-1.752z"/></svg>
+            微信
+          </button>
+        </div>
+      </form>
+
+      <!-- Register -->
+      <form class="auth-form" id="form-register" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label class="form-label">Name</label>
+          <input class="form-input" type="text" id="reg-name" placeholder="你的名字" required autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" id="reg-email" placeholder="you@example.com" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" id="reg-password" placeholder="至少 8 位" required minlength="8" autocomplete="new-password">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Role</label>
+          <select class="form-input" id="reg-role">
+            <option value="">选择角色（可选）</option>
+            <option value="founder">创业者 / 创始人</option>
+            <option value="developer">开发者 / 工程师</option>
+            <option value="investor">投资人</option>
+            <option value="product">产品经理</option>
+            <option value="researcher">研究员</option>
+            <option value="enthusiast">AI 爱好者</option>
+          </select>
+        </div>
+        <button type="submit" class="form-submit" style="margin-top: 4px;">CREATE ACCOUNT →</button>
+        <div class="divider">or</div>
+        <div class="social-btns">
+          <button type="button" class="social-btn" onclick="socialLogin('google')">
+            <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            Google
+          </button>
+          <button type="button" class="social-btn" onclick="socialLogin('wechat')">
+            <svg viewBox="0 0 24 24" fill="#07C160"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.534c0 2.22 1.174 4.215 3.016 5.607l-.752 2.264 2.628-1.346c.898.258 1.853.4 2.849.4.324 0 .643-.018.958-.049a5.1 5.1 0 01-.211-1.455c0-3.57 3.368-6.467 7.512-6.467.26 0 .515.013.767.036C16.07 4.948 12.697 2.188 8.691 2.188zM5.745 6.74a1.09 1.09 0 110 2.18 1.09 1.09 0 010-2.18zm5.892 0a1.09 1.09 0 110 2.18 1.09 1.09 0 010-2.18z"/><path d="M24 14.955c0-3.31-3.368-5.993-7.512-5.993-4.146 0-7.513 2.683-7.513 5.993s3.367 5.993 7.513 5.993c.882 0 1.728-.14 2.512-.393l2.124 1.088-.608-1.83C22.932 18.68 24 16.926 24 14.955zm-9.946-1.1a.876.876 0 110 1.752.876.876 0 010-1.752zm4.868 0a.876.876 0 110 1.752.876.876 0 010-1.752z"/></svg>
+            微信
+          </button>
+        </div>
+        <p class="auth-terms">注册即表示同意 <a href="#">服务条款</a> 和 <a href="#">隐私政策</a></p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="page-footer">© 2026 SIGNAL</div>
+
+<script>
+if (localStorage.getItem('ai_news_user')) window.location.href = 'app.html';
+
+const params = new URLSearchParams(window.location.search);
+if (params.get('tab') === 'register') switchAuthTab('register');
+
+function switchAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+  document.querySelector(`.auth-tab[data-tab="${tab}"]`).classList.add('active');
+  document.getElementById(`form-${tab}`).classList.add('active');
+}
+
+function showToast(msg, isError) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show' + (isError ? ' error' : '');
+  setTimeout(() => t.className = 'toast', 2500);
+}
+
+const ADMIN_EMAILS = ['wenwenwen1227@gmail.com'];
+function isAdmin(email) { return ADMIN_EMAILS.includes(email); }
+function getUserPlan(email, fallback) { return isAdmin(email) ? 'pro' : (fallback || 'free'); }
+function getUserRole(email, fallback) { return isAdmin(email) ? 'admin' : (fallback || ''); }
+
+function handleLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  const users = JSON.parse(localStorage.getItem('ai_news_users') || '{}');
+  const user = users[email];
+  if (!user) { showToast('该邮箱未注册', true); return; }
+  if (user.password !== password) { showToast('密码错误', true); return; }
+  localStorage.setItem('ai_news_user', JSON.stringify({ email: user.email, name: user.name, role: getUserRole(email, user.role), plan: getUserPlan(email, user.plan), isAdmin: isAdmin(email), loggedInAt: new Date().toISOString() }));
+  showToast(isAdmin(email) ? '欢迎回来，管理员' : '登录成功'); setTimeout(() => window.location.href = 'app.html', 600);
+}
+
+function handleRegister(e) {
+  e.preventDefault();
+  const name = document.getElementById('reg-name').value;
+  const email = document.getElementById('reg-email').value;
+  const password = document.getElementById('reg-password').value;
+  const role = document.getElementById('reg-role').value;
+  const users = JSON.parse(localStorage.getItem('ai_news_users') || '{}');
+  if (users[email]) { showToast('该邮箱已注册', true); switchAuthTab('login'); return; }
+  users[email] = { email, name, password, role: getUserRole(email, role), plan: getUserPlan(email), createdAt: new Date().toISOString() };
+  localStorage.setItem('ai_news_users', JSON.stringify(users));
+  localStorage.setItem('ai_news_user', JSON.stringify({ email, name, role: getUserRole(email, role), plan: getUserPlan(email), isAdmin: isAdmin(email), loggedInAt: new Date().toISOString() }));
+  showToast(isAdmin(email) ? '欢迎，管理员' : '注册成功'); setTimeout(() => window.location.href = 'app.html', 600);
+}
+
+function socialLogin(provider) {
+  const name = provider === 'google' ? 'Google 用户' : '微信用户';
+  localStorage.setItem('ai_news_user', JSON.stringify({ email: `${provider}@demo.com`, name, role: '', plan: 'free', provider, loggedInAt: new Date().toISOString() }));
+  showToast('登录成功'); setTimeout(() => window.location.href = 'app.html', 600);
+}
+</script>
+</body>
+</html>
