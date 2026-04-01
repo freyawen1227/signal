@@ -230,10 +230,20 @@ a { text-decoration: none; color: inherit; }
   .article-body li { font-size: 13px; }
   .video-info { padding: 14px; }
 }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+  font-family: var(--mono); font-size: 13px; color: #fff;
+  background: var(--text); padding: 12px 24px; border-radius: 4px;
+  opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999;
+}
+.toast.show { opacity: 1; }
 </style>
 </head>
 <body>
 
+<div class="toast" id="toast"></div>
 <nav class="nav">
   <div class="nav-inner">
     <div class="nav-left">
@@ -279,23 +289,20 @@ function md2html(md) {
   return html;
 }
 
+// Toast
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show';
+  setTimeout(() => t.className = 'toast', 2500);
+}
+
 // Share functions
 function copyLink() {
-  navigator.clipboard.writeText(window.location.href).then(() => {
-    const btn = event.target;
-    btn.textContent = '✓ 已复制';
-    btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = '📋 复制链接'; btn.classList.remove('copied'); }, 2000);
-  });
+  navigator.clipboard.writeText(window.location.href).then(() => showToast('✓ 链接已复制'));
 }
 function shareWechat() {
-  // 微信没有直接分享链接的API，复制链接让用户粘贴到微信
-  navigator.clipboard.writeText(document.querySelector('.article-title')?.textContent + '\n' + window.location.href).then(() => {
-    const btn = event.target;
-    btn.textContent = '✓ 已复制，去微信粘贴分享';
-    btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = '微信'; btn.classList.remove('copied'); }, 3000);
-  });
+  const title = document.querySelector('.article-title')?.textContent || '';
+  navigator.clipboard.writeText(title + '\n' + window.location.href).then(() => showToast('✓ 已复制标题和链接，去微信粘贴分享吧'));
 }
 
 // Render article
