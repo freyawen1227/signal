@@ -160,6 +160,31 @@ a { text-decoration: none; color: inherit; }
   border: 1px dotted var(--border); letter-spacing: 0.3px;
 }
 
+/* Guest intro */
+.guest-intro {
+  margin: 24px 0; padding: 16px 20px; border-radius: 2px;
+  background: var(--accent-dim); border-left: 3px solid var(--accent);
+}
+.guest-intro .guest-label {
+  font-family: var(--mono); font-size: 11px; color: var(--accent);
+  font-weight: 600; letter-spacing: 0.3px; margin-bottom: 6px;
+}
+.guest-intro .guest-text {
+  font-size: 14px; line-height: 1.7; color: var(--text-dim);
+}
+
+/* Share bar */
+.share-bar {
+  display: flex; gap: 8px; margin: 24px 0; flex-wrap: wrap;
+}
+.share-btn {
+  font-family: var(--mono); font-size: 12px; padding: 8px 16px;
+  border: 2px dotted var(--border); background: var(--bg-card);
+  color: var(--text-dim); cursor: pointer; transition: all 0.15s;
+}
+.share-btn:hover { border-color: var(--accent); color: var(--accent); }
+.share-btn.copied { border-color: #22863a; color: #22863a; }
+
 /* Source footer */
 .article-footer {
   margin-top: 40px; padding: 20px; border: 2px dotted var(--border);
@@ -254,6 +279,24 @@ function md2html(md) {
   return html;
 }
 
+// Share functions
+function copyLink() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const btn = event.target;
+    btn.textContent = '✓ 已复制';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '📋 复制链接'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+function shareTwitter() {
+  const title = document.querySelector('.article-title')?.textContent || '';
+  window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(title + ' — SIGNAL') + '&url=' + encodeURIComponent(window.location.href), '_blank');
+}
+function shareWeibo() {
+  const title = document.querySelector('.article-title')?.textContent || '';
+  window.open('https://service.weibo.com/share/share.php?title=' + encodeURIComponent(title + ' — SIGNAL') + '&url=' + encodeURIComponent(window.location.href), '_blank');
+}
+
 // Render article
 const params = new URLSearchParams(window.location.search);
 const id = params.get('id');
@@ -285,11 +328,18 @@ if (!id) {
           </a>
         </div>
         <h1 class="article-title">${article.title}</h1>
+        ${article.guest ? `<div class="guest-intro"><div class="guest-label">嘉宾介绍</div><div class="guest-text">${article.guest}</div></div>` : ''}
+        <div class="share-bar">
+          <button class="share-btn" onclick="copyLink()">📋 复制链接</button>
+          <button class="share-btn" onclick="shareTwitter()">𝕏 Twitter</button>
+          <button class="share-btn" onclick="shareWeibo()">微博</button>
+        </div>
         <div class="article-body">${md2html(article.content)}</div>
         <div class="article-tags">${article.tags.map(t => `<span class="article-tag">${t}</span>`).join('')}</div>
-        <div class="article-footer">
-          <p>内容来源：${article.source}</p>
-          <a href="${article.sourceUrl}" target="_blank" rel="noopener"><span class="yt-icon">▶</span> 观看原视频 ↗</a>
+        <div class="share-bar">
+          <button class="share-btn" onclick="copyLink()">📋 复制链接</button>
+          <button class="share-btn" onclick="shareTwitter()">𝕏 Twitter</button>
+          <button class="share-btn" onclick="shareWeibo()">微博</button>
         </div>
       `;
     })

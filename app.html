@@ -205,10 +205,10 @@ function buildCard(a) {
         <span class="card-date">${a.date}</span>
       </div>
       <h3 class="card-title">${a.title}</h3>
+      <p class="card-summary">${(a.summary || '').substring(0, 120)}…</p>
       <div class="card-tags">
         ${tagsHTML}
       </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 ${a.source}</div>
     </div>`;
 }
 

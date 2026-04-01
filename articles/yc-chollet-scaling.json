@@ -1,6 +1,7 @@
 {
   "id": "yc-chollet-scaling",
   "title": "François Chollet：为什么光靠Scaling不够，通往AGI需要新范式",
+  "guest": "François Chollet，Keras 深度学习框架创始人、ARC-AGI 基准测试设计者、NDYA 实验室联合创始人，AI 领域最具独立思考精神的研究者之一，以挑战主流 Scaling 路线闻名。",
   "date": "2026-03-27",
   "source": "Lightcone Podcast (Y Combinator)",
   "category": "tech",
