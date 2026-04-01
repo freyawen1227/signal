@@ -288,13 +288,14 @@ function copyLink() {
     setTimeout(() => { btn.textContent = '📋 复制链接'; btn.classList.remove('copied'); }, 2000);
   });
 }
-function shareTwitter() {
-  const title = document.querySelector('.article-title')?.textContent || '';
-  window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(title + ' — SIGNAL') + '&url=' + encodeURIComponent(window.location.href), '_blank');
-}
-function shareWeibo() {
-  const title = document.querySelector('.article-title')?.textContent || '';
-  window.open('https://service.weibo.com/share/share.php?title=' + encodeURIComponent(title + ' — SIGNAL') + '&url=' + encodeURIComponent(window.location.href), '_blank');
+function shareWechat() {
+  // 微信没有直接分享链接的API，复制链接让用户粘贴到微信
+  navigator.clipboard.writeText(document.querySelector('.article-title')?.textContent + '\n' + window.location.href).then(() => {
+    const btn = event.target;
+    btn.textContent = '✓ 已复制，去微信粘贴分享';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '微信'; btn.classList.remove('copied'); }, 3000);
+  });
 }
 
 // Render article
@@ -330,16 +331,16 @@ if (!id) {
         <h1 class="article-title">${article.title}</h1>
         ${article.guest ? `<div class="guest-intro"><div class="guest-label">嘉宾介绍</div><div class="guest-text">${article.guest}</div></div>` : ''}
         <div class="share-bar">
+          <span style="font-family:var(--mono);font-size:12px;color:var(--text-muted);margin-right:4px;">分享文章</span>
+          <button class="share-btn" onclick="shareWechat()">微信</button>
           <button class="share-btn" onclick="copyLink()">📋 复制链接</button>
-          <button class="share-btn" onclick="shareTwitter()">𝕏 Twitter</button>
-          <button class="share-btn" onclick="shareWeibo()">微博</button>
         </div>
         <div class="article-body">${md2html(article.content)}</div>
         <div class="article-tags">${article.tags.map(t => `<span class="article-tag">${t}</span>`).join('')}</div>
         <div class="share-bar">
+          <span style="font-family:var(--mono);font-size:12px;color:var(--text-muted);margin-right:4px;">分享文章</span>
+          <button class="share-btn" onclick="shareWechat()">微信</button>
           <button class="share-btn" onclick="copyLink()">📋 复制链接</button>
-          <button class="share-btn" onclick="shareTwitter()">𝕏 Twitter</button>
-          <button class="share-btn" onclick="shareWeibo()">微博</button>
         </div>
       `;
     })
