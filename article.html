@@ -247,11 +247,11 @@ a { text-decoration: none; color: inherit; }
 <nav class="nav">
   <div class="nav-inner">
     <div class="nav-left">
-      <div class="nav-logo" onclick="window.location.href='app.html'">
-        <span class="dot"></span> SIGNAL
-      </div>
+      <a href="product-preview.html" class="nav-logo"><span class="dot"></span>SIGNAL</a>
     </div>
-    <button class="back-btn" onclick="if(history.length>1){history.back()}else{location.href='app.html'}">← 返回</button>
+    <div class="nav-right">
+      <button class="back-btn" onclick="if(history.length>1){history.back()}else{location.href='app.html'}">← 返回列表</button>
+    </div>
   </div>
 </nav>
 
