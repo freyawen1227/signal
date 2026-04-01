@@ -46,44 +46,6 @@ a { text-decoration: none; color: inherit; }
 }
 .nav-logo .dot { width: 8px; height: 8px; background: var(--accent); }
 .nav-right { display: flex; align-items: center; gap: 14px; }
-.user-menu {
-  display: flex; align-items: center; gap: 8px; cursor: pointer;
-  padding: 4px 8px; border-radius: 2px; transition: background 0.15s;
-  position: relative;
-}
-.user-menu:hover { background: var(--bg-hover); }
-.user-avatar {
-  width: 28px; height: 28px; border-radius: 2px;
-  border: 2px solid var(--accent);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--pixel); font-size: 10px; font-weight: 400; color: var(--accent);
-}
-.user-name { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--text-dim); }
-.user-plan {
-  font-family: var(--pixel); font-size: 7px; font-weight: 400; padding: 2px 6px;
-  border-radius: 0; background: var(--bg-hover); color: var(--text-dim);
-  text-transform: uppercase; letter-spacing: 1px; border: 1px solid var(--border);
-}
-.user-plan.pro { background: var(--accent); color: #fff; border-color: var(--accent); }
-.user-dropdown {
-  display: none; position: absolute; top: 100%; right: 0; margin-top: 8px;
-  background: var(--bg-card); border-radius: 2px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  border: 2px dotted var(--border); min-width: 200px; overflow: hidden; z-index: 200;
-}
-.user-dropdown.show { display: block; }
-.dropdown-header {
-  padding: 14px 16px; border-bottom: 2px dotted var(--border);
-  font-family: var(--mono); font-size: 12px; color: var(--text-dim);
-}
-.dropdown-header .email { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-.dropdown-item {
-  display: block; width: 100%; padding: 10px 16px;
-  font-family: var(--mono); font-size: 12px; color: var(--text-dim);
-  border: none; background: none; text-align: left; cursor: pointer; transition: all 0.1s;
-}
-.dropdown-item:hover { background: var(--bg-hover); color: var(--text); }
-.dropdown-item.danger { color: var(--accent); }
-
 /* ===== Layout ===== */
 .main { max-width: 900px; margin: 0 auto; padding: 76px 24px 60px; }
 
@@ -159,39 +121,6 @@ a { text-decoration: none; color: inherit; }
 }
 .card-yt .yt-icon { color: #d73a49; font-size: 12px; }
 
-/* Paywall overlay */
-.feed-paywall { position: relative; overflow: hidden; }
-.feed-paywall .paywall-cards {
-  filter: blur(2px); opacity: 0.5; pointer-events: none; user-select: none;
-}
-.feed-paywall .paywall-overlay {
-  position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 10;
-  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.85) 40%, rgba(255,255,255,0.98) 70%);
-  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-  gap: 16px; padding: 24px 24px 80px;
-}
-.paywall-overlay .paywall-icon {
-  font-family: var(--pixel); font-size: 24px; color: var(--accent); line-height: 1;
-}
-.paywall-overlay .paywall-title {
-  font-family: var(--sans); font-size: 20px; font-weight: 700; color: var(--text);
-  text-align: center;
-}
-.paywall-overlay .paywall-desc {
-  font-family: var(--mono); font-size: 13px; color: var(--text-dim);
-  text-align: center; line-height: 1.6; max-width: 360px;
-}
-.paywall-overlay .paywall-btn {
-  padding: 14px 36px; border-radius: 2px;
-  font-family: var(--pixel); font-size: 10px; font-weight: 400;
-  background: var(--accent); color: #fff; border: none; cursor: pointer;
-  letter-spacing: 0.5px; transition: all 0.2s;
-}
-.paywall-overlay .paywall-btn:hover { box-shadow: 0 0 0 4px var(--accent-dim); }
-.paywall-overlay .paywall-sub {
-  font-family: var(--mono); font-size: 11px; color: var(--text-muted);
-}
-
 /* ===== Toast ===== */
 .toast {
   position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
@@ -220,22 +149,7 @@ a { text-decoration: none; color: inherit; }
     <div class="nav-left">
       <div class="nav-logo"><span class="dot"></span>SIGNAL</div>
     </div>
-    <div class="nav-right">
-      <div class="user-menu" onclick="toggleDropdown()">
-        <div class="user-avatar" id="avatar">U</div>
-        <span class="user-name" id="userName">User</span>
-        <span class="user-plan" id="userPlan">FREE</span>
-        <div class="user-dropdown" id="dropdown">
-          <div class="dropdown-header">
-            <div id="dropdownName">User</div>
-            <div class="email" id="dropdownEmail">user@example.com</div>
-          </div>
-          <button class="dropdown-item">个人设置</button>
-          <button class="dropdown-item">订阅管理</button>
-          <button class="dropdown-item danger" onclick="logout()">退出登录</button>
-        </div>
-      </div>
-    </div>
+    <div class="nav-right"></div>
   </div>
 </nav>
 
@@ -257,367 +171,11 @@ a { text-decoration: none; color: inherit; }
 
   <!-- Feed -->
   <div class="feed" id="feed">
-    <div class="card" data-category="interview" data-id="20vc-marc-andreessen" onclick="openArticle(this)">
-      <div class="card-top">
-        <span class="card-cat cat-interview">深度访谈</span>
-        <span class="card-channel">20VC</span>
-        <span class="card-dot">/</span>
-        <span class="card-duration">约77分钟</span>
-        <span class="card-dot">/</span>
-        <span class="card-date">2026-03-30</span>
-      </div>
-      <h3>Marc Andreessen：a16z会上市吗？为什么AI取代劳动力的论调是错的</h3>
-      <p class="card-summary">a16z掌门人深度拆解风投决策的遗漏型错误、识别顶级创始人的三层公式、AI价值的熊彼特式分配框架，以及驳斥劳动总量谬误。</p>
-      <div class="card-tags">
-        <span class="card-tag">Marc Andreessen</span>
-        <span class="card-tag">a16z</span>
-        <span class="card-tag">AI劳动力</span>
-        <span class="card-tag">风投</span>
-        <span class="card-tag">创始人</span>
-      </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 20VC with Harry Stebbings</div>
-    </div>
-
-    <div class="card" data-category="interview" data-id="lenny-openclaw-claire" onclick="openArticle(this)">
-      <div class="card-top">
-        <span class="card-cat cat-interview">深度访谈</span>
-        <span class="card-channel">Lenny's Podcast</span>
-        <span class="card-dot">/</span>
-        <span class="card-duration">约107分钟</span>
-        <span class="card-dot">/</span>
-        <span class="card-date">2026-03-29</span>
-      </div>
-      <h3>从怀疑者到信徒：OpenClaw如何改变了我的工作方式</h3>
-      <p class="card-summary">Claire Vo 讲述从删日历到组建九个AI智能体团队的完整转变，以及"专职智能体胜过万能智能体"的实战方法论。</p>
-      <div class="card-tags">
-        <span class="card-tag">OpenClaw</span>
-        <span class="card-tag">AI Agent</span>
-        <span class="card-tag">Claude Code</span>
-        <span class="card-tag">产品管理</span>
-        <span class="card-tag">AI工作流</span>
-      </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 Lenny's Podcast</div>
-    </div>
-
-    <div class="card" data-category="interview" data-id="huang-lex-fridman" onclick="openArticle(this)">
-      <div class="card-top">
-        <span class="card-cat cat-interview">深度访谈</span>
-        <span class="card-channel">Lex Fridman</span>
-        <span class="card-dot">/</span>
-        <span class="card-duration">约3小时</span>
-        <span class="card-dot">/</span>
-        <span class="card-date">2026-03-23</span>
-      </div>
-      <h3>黄仁勋最新深度访谈：从洗碗工到3万亿美元帝国掌舵人的思维操作系统</h3>
-      <p class="card-summary">CUDA的豪赌、极端协同设计哲学、AI四大扩展定律，以及"光速思维"方法论。</p>
-      <div class="card-tags">
-        <span class="card-tag">Jensen Huang</span>
-        <span class="card-tag">NVIDIA</span>
-        <span class="card-tag">CUDA</span>
-        <span class="card-tag">AI工厂</span>
-        <span class="card-tag">AGI</span>
-      </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 Lex Fridman Podcast #494</div>
-    </div>
-
-    <div class="card" data-category="debate" data-id="allin-anthropic-run" onclick="openArticle(this)">
-      <div class="card-top">
-        <span class="card-cat cat-debate">圆桌激辩</span>
-        <span class="card-channel">All-In Podcast</span>
-        <span class="card-dot">/</span>
-        <span class="card-duration">约80分钟</span>
-        <span class="card-dot">/</span>
-        <span class="card-date">2026-03-27</span>
-      </div>
-      <h3>Anthropic的世代级崛起、OpenAI的焦虑、AI护城河与Meta败诉</h3>
-      <p class="card-summary">四大嘴炮深度拆解Anthropic崛起逻辑、OpenAI的战略摇摆、AI公司的护城河理论，以及Meta反垄断败诉的深远影响。</p>
-      <div class="card-tags">
-        <span class="card-tag">Anthropic</span>
-        <span class="card-tag">OpenAI</span>
-        <span class="card-tag">AI Moats</span>
-        <span class="card-tag">Meta</span>
-        <span class="card-tag">估值</span>
-      </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 All-In Podcast</div>
-    </div>
-
-    <div class="card" data-category="tech" data-id="yc-chollet-scaling" onclick="openArticle(this)">
-      <div class="card-top">
-        <span class="card-cat cat-tech">技术解析</span>
-        <span class="card-channel">Lightcone (YC)</span>
-        <span class="card-dot">/</span>
-        <span class="card-duration">约57分钟</span>
-        <span class="card-dot">/</span>
-        <span class="card-date">2026-03-27</span>
-      </div>
-      <h3>François Chollet：为什么光靠Scaling不够，通往AGI需要新范式</h3>
-      <p class="card-summary">ARC-AGI创造者Chollet系统阐述LLM Scaling的局限、ARC基准的设计哲学、以及NDYA符号学习的新路线。</p>
-      <div class="card-tags">
-        <span class="card-tag">François Chollet</span>
-        <span class="card-tag">ARC-AGI</span>
-        <span class="card-tag">Scaling Laws</span>
-        <span class="card-tag">AGI</span>
-        <span class="card-tag">程序合成</span>
-      </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 Lightcone (YC)</div>
-    </div>
-
-    <div class="card" data-category="debate" data-id="20vc-groq-deal" onclick="openArticle(this)">
-      <div class="card-top">
-        <span class="card-cat cat-debate">圆桌激辩</span>
-        <span class="card-channel">20VC</span>
-        <span class="card-dot">/</span>
-        <span class="card-duration">约79分钟</span>
-        <span class="card-dot">/</span>
-        <span class="card-date">2026-03-26</span>
-      </div>
-      <h3>Series A需要10亿美元基金、SpaceX 2万亿估值、Groq 200亿并购内幕</h3>
-      <p class="card-summary">Anthropic vs OpenAI企业争夺战、SpaceX芯片厂估值逻辑、Groq 200亿并购的收入倍数解剖、VC行业数学崩裂。</p>
-      <div class="card-tags">
-        <span class="card-tag">Groq</span>
-        <span class="card-tag">SpaceX</span>
-        <span class="card-tag">VC</span>
-        <span class="card-tag">Series A</span>
-        <span class="card-tag">AI基础设施</span>
-      </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 20VC with Harry Stebbings</div>
-    </div>
-
-    <div class="card" data-category="interview" data-id="huang-allin-gtc" onclick="openArticle(this)">
-      <div class="card-top">
-        <span class="card-cat cat-interview">深度访谈</span>
-        <span class="card-channel">All-In Podcast</span>
-        <span class="card-dot">/</span>
-        <span class="card-duration">约55分钟</span>
-        <span class="card-dot">/</span>
-        <span class="card-date">2026-03-22</span>
-      </div>
-      <h3>黄仁勋GTC大会深度对话：推理爆炸、Agent革命与AI的万亿美元未来</h3>
-      <p class="card-summary">GTC 2026大会上，All-In四位主播与黄仁勋深度对话。黄仁勋全面阐述英伟达向"AI工厂"的战略转型，推理需求两年增长一万倍，预测将达百万倍。</p>
-      <div class="card-tags">
-        <span class="card-tag">Jensen Huang</span>
-        <span class="card-tag">NVIDIA</span>
-        <span class="card-tag">GTC</span>
-        <span class="card-tag">Agent</span>
-        <span class="card-tag">推理</span>
-      </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 All-In Podcast — GTC 2026 Live</div>
-    </div>
-
-    <div class="card" data-category="debate" data-id="allin-four-ceos-gtc" onclick="openArticle(this)">
-      <div class="card-top">
-        <span class="card-cat cat-debate">圆桌激辩</span>
-        <span class="card-channel">All-In Podcast</span>
-        <span class="card-dot">/</span>
-        <span class="card-duration">约55分钟</span>
-        <span class="card-dot">/</span>
-        <span class="card-date">2026-03-22</span>
-      </div>
-      <h3>四位AI CEO的GTC对话：算力、产品、开源与能源的终极博弈</h3>
-      <p class="card-summary">Jason Calacanis在GTC现场分别对话CoreWeave、Perplexity、Mistral AI、IREN四位CEO，覆盖算力基础设施、AI搜索、开源模型与能源瓶颈。</p>
-      <div class="card-tags">
-        <span class="card-tag">CoreWeave</span>
-        <span class="card-tag">Perplexity</span>
-        <span class="card-tag">Mistral</span>
-        <span class="card-tag">IREN</span>
-        <span class="card-tag">GTC</span>
-      </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 All-In Podcast — GTC 2026</div>
-    </div>
-
-    <div class="card" data-category="tech" data-id="karpathy-code-agents" onclick="openArticle(this)">
-      <div class="card-top">
-        <span class="card-cat cat-tech">技术解析</span>
-        <span class="card-channel">No Priors</span>
-        <span class="card-dot">/</span>
-        <span class="card-duration">约75分钟</span>
-        <span class="card-dot">/</span>
-        <span class="card-date">2026-03-21</span>
-      </div>
-      <h3>Karpathy深度访谈：代码智能体、自动化科研，以及AI的"循环时代"</h3>
-      <p class="card-summary">前OpenAI研究员Karpathy分享一线体验：从2025年12月起几乎不再亲手写代码，全天候用AI智能体"表达意志"，称之为"AI精神病"状态。</p>
-      <div class="card-tags">
-        <span class="card-tag">Andrej Karpathy</span>
-        <span class="card-tag">Code Agent</span>
-        <span class="card-tag">Auto Research</span>
-        <span class="card-tag">开源</span>
-      </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 No Priors Podcast</div>
-    </div>
-
-    <div class="card" data-category="interview" data-id="figma-cro-sales" onclick="openArticle(this)">
-      <div class="card-top">
-        <span class="card-cat cat-interview">深度访谈</span>
-        <span class="card-channel">20VC</span>
-        <span class="card-dot">/</span>
-        <span class="card-duration">约65分钟</span>
-        <span class="card-dot">/</span>
-        <span class="card-date">2026-03-21</span>
-      </div>
-      <h3>Figma CRO的反直觉销售哲学：为什么我不信配额</h3>
-      <p class="card-summary">Figma CRO 拆解三层销售结构、无传统CS的组织设计、"配额是虚构的"背后的真实含义，以及AI销售工具的市场机会。</p>
-      <div class="card-tags">
-        <span class="card-tag">Figma</span>
-        <span class="card-tag">Sales</span>
-        <span class="card-tag">PLG</span>
-        <span class="card-tag">SaaS</span>
-        <span class="card-tag">产品增长</span>
-      </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 20VC with Harry Stebbings</div>
-    </div>
-
-    <div class="card" data-category="interview" data-id="turley-chatgpt-assistant" onclick="openArticle(this)">
-      <div class="card-top">
-        <span class="card-cat cat-interview">深度访谈</span>
-        <span class="card-channel">BG2 Pod</span>
-        <span class="card-dot">/</span>
-        <span class="card-duration">约55分钟</span>
-        <span class="card-dot">/</span>
-        <span class="card-date">2026-03-20</span>
-      </div>
-      <h3>ChatGPT的超级助手野心：9亿周活背后的产品哲学与下一个十亿用户之战</h3>
-      <p class="card-summary">OpenAI产品负责人Nick Turley深入解析ChatGPT从"一个月后下线的demo"成长为9亿周活超级产品的历程，以及定价演变、GPU零和博弈与Code Red内幕。</p>
-      <div class="card-tags">
-        <span class="card-tag">Nick Turley</span>
-        <span class="card-tag">OpenAI</span>
-        <span class="card-tag">ChatGPT</span>
-        <span class="card-tag">产品</span>
-        <span class="card-tag">增长</span>
-      </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 BG2 Pod — Guest Interview</div>
-    </div>
-
-    <div class="card" data-category="debate" data-id="20vc-nvidia-gtc-anduril" onclick="openArticle(this)">
-      <div class="card-top">
-        <span class="card-cat cat-debate">圆桌激辩</span>
-        <span class="card-channel">20VC</span>
-        <span class="card-dot">/</span>
-        <span class="card-duration">约78分钟</span>
-        <span class="card-dot">/</span>
-        <span class="card-date">2026-03-19</span>
-      </div>
-      <h3>NVIDIA万亿收入预测、Anduril $200亿合同、裁员潮与AI流利度新标准</h3>
-      <p class="card-summary">GTC万亿预测为何没撼动股价、五种裁员逻辑背后的方向、Anduril从试用到主导供应商、种子基金的结构性困境。</p>
-      <div class="card-tags">
-        <span class="card-tag">NVIDIA</span>
-        <span class="card-tag">GTC</span>
-        <span class="card-tag">Anduril</span>
-        <span class="card-tag">裁员</span>
-        <span class="card-tag">AI流利度</span>
-      </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 20VC with Harry Stebbings</div>
-    </div>
-
-    <div class="card" data-category="tech" data-id="yc-ai-builders" onclick="openArticle(this)">
-      <div class="card-top">
-        <span class="card-cat cat-tech">技术解析</span>
-        <span class="card-channel">Lightcone (YC)</span>
-        <span class="card-dot">/</span>
-        <span class="card-duration">约40分钟</span>
-        <span class="card-dot">/</span>
-        <span class="card-date">2026-03-16</span>
-      </div>
-      <h3>AI正在解锁数百万新创造者：YC看到的创业新范式</h3>
-      <p class="card-summary">YC投资的Emergent团队分享：8个月700万应用的增长数据、非技术用户平台的转型、SaaS的两大冲击与域专家创业的机会。</p>
-      <div class="card-tags">
-        <span class="card-tag">YC</span>
-        <span class="card-tag">Vibe Coding</span>
-        <span class="card-tag">Agent</span>
-        <span class="card-tag">非技术创业</span>
-        <span class="card-tag">SWE-Bench</span>
-      </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 Lightcone Podcast (Y Combinator)</div>
-    </div>
-
-    <div class="card" data-category="interview" data-id="simon-last-notion-ai" onclick="openArticle(this)">
-      <div class="card-top">
-        <span class="card-cat cat-interview">深度访谈</span>
-        <span class="card-channel">No Priors</span>
-        <span class="card-dot">/</span>
-        <span class="card-duration">约29分钟</span>
-        <span class="card-dot">/</span>
-        <span class="card-date">2026-03-12</span>
-      </div>
-      <h3>Notion核心人物Simon Last：从笔记应用到AI工作空间的转型内幕</h3>
-      <p class="card-summary">Simon Last 拆解Notion AI演进全路径：从GPT-4内测到自定义Agent落地，以及"定期重写harness"的产品哲学。</p>
-      <div class="card-tags">
-        <span class="card-tag">Notion</span>
-        <span class="card-tag">AI Workspace</span>
-        <span class="card-tag">Agent</span>
-        <span class="card-tag">产品转型</span>
-      </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 No Priors Podcast</div>
-    </div>
-
-    <div class="card" data-category="interview" data-id="cursor-not-dead" onclick="openArticle(this)">
-      <div class="card-top">
-        <span class="card-cat cat-interview">深度访谈</span>
-        <span class="card-channel">20VC</span>
-        <span class="card-dot">/</span>
-        <span class="card-duration">约64分钟</span>
-        <span class="card-dot">/</span>
-        <span class="card-date">2026-03-09</span>
-      </div>
-      <h3>"Cursor已死"纯属扯淡：Accel投资人用数据反驳AI编程工具末日论</h3>
-      <p class="card-summary">Accel投资人Miles Clements用真实数据反驳"Cursor已死"论：agent占比、增速、PR归因，以及AI时代SaaS颠覆的投资框架。</p>
-      <div class="card-tags">
-        <span class="card-tag">Cursor</span>
-        <span class="card-tag">Accel</span>
-        <span class="card-tag">AI编程</span>
-        <span class="card-tag">SaaS</span>
-        <span class="card-tag">投资</span>
-      </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 20VC with Harry Stebbings</div>
-    </div>
-
-    <div class="card" data-category="interview" data-id="monday-saas-dead" onclick="openArticle(this)">
-      <div class="card-top">
-        <span class="card-cat cat-interview">深度访谈</span>
-        <span class="card-channel">20VC</span>
-        <span class="card-dot">/</span>
-        <span class="card-duration">约74分钟</span>
-        <span class="card-dot">/</span>
-        <span class="card-date">2026-03-02</span>
-      </div>
-      <h3>Monday.com CEO：SaaS是否已死？Vibe Coding会颠覆一切吗？</h3>
-      <p class="card-summary">Monday.com CEO Eran Zinman拆解SaaS末日论三个版本、AI原生vs bolt-on的护城河差异、用AI替换SDR的实战经验。</p>
-      <div class="card-tags">
-        <span class="card-tag">Monday.com</span>
-        <span class="card-tag">SaaS</span>
-        <span class="card-tag">Vibe Coding</span>
-        <span class="card-tag">AI转型</span>
-        <span class="card-tag">定价</span>
-      </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 20VC with Harry Stebbings</div>
-    </div>
-
-    <div class="card" data-category="interview" data-id="jenny-wen-claude-design" onclick="openArticle(this)">
-      <div class="card-top">
-        <span class="card-cat cat-interview">深度访谈</span>
-        <span class="card-channel">Lenny's Podcast</span>
-        <span class="card-dot">/</span>
-        <span class="card-duration">约77分钟</span>
-        <span class="card-dot">/</span>
-        <span class="card-date">2026-03-01</span>
-      </div>
-      <h3>Claude设计负责人Jenny Wen：设计流程已死，AI原生产品的新做法</h3>
-      <p class="card-summary">Anthropic设计负责人拆解AI原生产品设计逻辑：发布节奏为何变了、Legibility框架找机会、Claude Co-work的真实诞生过程。</p>
-      <div class="card-tags">
-        <span class="card-tag">Anthropic</span>
-        <span class="card-tag">Claude</span>
-        <span class="card-tag">设计</span>
-        <span class="card-tag">AI产品</span>
-        <span class="card-tag">Legibility</span>
-      </div>
-      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 Lenny's Podcast</div>
-    </div>
-
-
   </div>
 </div>
 
 <script>
-// Init UI
+// Greeting
 {
   const h = new Date().getHours();
   let g = '早上好'; if (h >= 12 && h < 18) g = '下午好'; else if (h >= 18) g = '晚上好';
@@ -625,6 +183,43 @@ a { text-decoration: none; color: inherit; }
   if (greetEl) greetEl.textContent = g;
 }
 
+// Category mapping
+const CAT_MAP = {
+  interview: { cls: 'cat-interview', label: '深度访谈' },
+  keynote:   { cls: 'cat-keynote',   label: '大会演讲' },
+  debate:    { cls: 'cat-debate',    label: '圆桌激辩' },
+  tech:      { cls: 'cat-tech',      label: '技术解析' }
+};
+
+// Build card HTML from article object
+function buildCard(a) {
+  const cat = CAT_MAP[a.category] || { cls: '', label: a.category };
+  const tagsHTML = (a.tags || []).map(t => `<span class="card-tag">${t}</span>`).join('\n        ');
+  return `<div class="card" data-category="${a.category}" data-id="${a.id}" onclick="openArticle(this)">
+      <div class="card-top">
+        <span class="card-cat ${cat.cls}">${cat.label}</span>
+        <span class="card-channel">${a.source}</span>
+        <span class="card-dot">/</span>
+        <span class="card-date">${a.date}</span>
+      </div>
+      <h3 class="card-title">${a.title}</h3>
+      <div class="card-tags">
+        ${tagsHTML}
+      </div>
+      <div class="card-yt"><span class="yt-icon">▶</span> 原视频 ${a.source}</div>
+    </div>`;
+}
+
+// Fetch articles and render
+fetch('articles/index.json')
+  .then(res => res.json())
+  .then(articles => {
+    const feed = document.getElementById('feed');
+    feed.innerHTML = articles.map(buildCard).join('\n');
+  })
+  .catch(err => console.error('Failed to load articles:', err));
+
+// Filter
 function filterCards(el) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
@@ -638,11 +233,6 @@ function filterCards(el) {
   });
 }
 
-// Dropdown
-function toggleDropdown() { document.getElementById('dropdown').classList.toggle('show'); }
-document.addEventListener('click', e => {
-  if (!e.target.closest('.user-menu')) document.getElementById('dropdown').classList.remove('show');
-});
 
 // Open article
 function openArticle(el) {

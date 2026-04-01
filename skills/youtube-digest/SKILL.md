@@ -1,6 +1,6 @@
 ---
 name: youtube-digest
-description: Generate AI Insider platform articles from YouTube videos. Takes a YouTube URL, downloads transcript, and produces a structured Chinese analysis article with "信息差要点" and "创业者启示" sections. Outputs both markdown and articles-data.js entry. Use when user provides a YouTube URL and wants to create content for the AI Insider platform.
+description: Generate SIGNAL platform articles from YouTube videos. Takes a YouTube URL, downloads transcript, and produces a structured Chinese analysis article. Outputs markdown and publishes to articles/ JSON directory via publish.py. Use when user provides a YouTube URL and wants to create content for the SIGNAL platform.
 ---
 
 # AI Insider — YouTube 视频解读生成器
@@ -22,7 +22,7 @@ transcripts/
     ├── audio.mp3          # 音频文件（Whisper fallback时）
     ├── transcript.txt     # 清洗后的原始字幕
     ├── output.md          # AI Insider 格式的解读文章
-    └── data-entry.js      # 可直接复制到 articles-data.js 的条目
+    └── metadata.json      # 文章元数据（用于 publish.py）
 ```
 
 ## 完整工作流
@@ -32,7 +32,7 @@ transcripts/
 2. 获取字幕（优先字幕文件，fallback Whisper）
 3. 清洗并保存 transcript.txt
 4. 生成 AI Insider 格式的 output.md
-5. 生成 articles-data.js 的数据条目
+5. 用 publish.py 发布到 articles/ 目录
 6. [可选] 同步到飞书
 ```
 
@@ -151,27 +151,24 @@ mv audio.txt transcript.txt
 - **补充背景**：主动补充视频默认观众已知的背景
 - **通俗易懂**：假设读者无技术背景
 
-## Step 4: 生成 articles-data.js 条目
+## Step 4: 发布文章到 articles/ 目录
 
-生成完 output.md 后，同时生成 data-entry.js 文件，格式如下：
+生成完 output.md 后，使用 publish.py 将文章发布到 JSON 数据目录：
 
-```javascript
-// 复制以下内容到 articles-data.js 的 articles 对象中
-
-  '{article-id}': {
-    title: '{解读标题}',
-    date: '{YYYY-MM-DD}',
-    source: '{频道名 — 视频信息}',
-    category: '{interview|keynote|debate|tech|tutorial}',
-    catLabel: '{深度访谈|大会演讲|圆桌激辩|技术解析|教程}',
-    sourceUrl: '{YouTube URL}',
-    channelName: '{频道名}',
-    duration: '{时长}',
-    tags: ['{tag1}', '{tag2}', '{tag3}'],
-    summary: '{1-2句话摘要，用于卡片展示}',
-    content: `{output.md 中从"## 视频背景"开始的全部内容}`
-  },
+```bash
+python scripts/publish.py {article-id} \
+  --title "{解读标题}" \
+  --date {YYYY-MM-DD} \
+  --source "{频道名}" \
+  --category {interview|debate|tech|keynote} \
+  --tags "Tag1,Tag2,Tag3" \
+  --content "transcripts/{video-title}/output.md" \
+  --video-url "{YouTube URL}"
 ```
+
+这会自动：
+1. 创建 `articles/{article-id}.json`
+2. 更新 `articles/index.json`（按日期倒序）
 
 ### 分类规则
 

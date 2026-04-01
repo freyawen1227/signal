@@ -1,0 +1,323 @@
+[
+  {
+    "id": "20vc-marc-andreessen",
+    "title": "Marc Andreessen：a16z会上市吗？为什么AI取代劳动力的论调是错的",
+    "date": "2026-03-30",
+    "source": "20VC with Harry Stebbings",
+    "category": "interview",
+    "catLabel": "深度访谈",
+    "tags": [
+      "Marc Andreessen",
+      "a16z",
+      "AI劳动力",
+      "风投",
+      "创始人"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=c4tvVKDhpiY",
+    "channelName": "20VC",
+    "duration": "约77分钟",
+    "summary": "Marc Andreessen 首次登上 20VC，与主持人 Harry Stebbings 进行了一场跨越投资哲学、创始人判断、AI经济学与地缘格局的深度对话。Marc 旗帜鲜明地反对\"AI大规模取代劳动力\"的主流叙事，认为这是被过时的马克思主义\"劳动总量谬误\"误导的结果；他同时指出，当前企业裁员的根本原因是疫情期间的过度招聘与利率骤升，而非AI替代。在投资哲学层面，Marc 强调风险投资最应警"
+  },
+  {
+    "id": "lenny-openclaw-claire",
+    "title": "从怀疑者到信徒：OpenClaw如何改变了我的工作方式",
+    "date": "2026-03-29",
+    "source": "Lenny's Podcast",
+    "category": "interview",
+    "catLabel": "深度访谈",
+    "tags": [
+      "OpenClaw",
+      "AI Agent",
+      "Claude Code",
+      "产品管理",
+      "AI工作流"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=DIa0MYJzM5I",
+    "channelName": "Lenny's Podcast",
+    "duration": "约107分钟",
+    "summary": "本期播客是 Lenny's Podcast 与 How I AI 播客的跨界联动，主角是三届 CPO、AI 创业者 Claire Vo。Claire 曾是 OpenClaw 最有代表性的怀疑者——首次安装就花了八小时，结果把家庭日历全删了——如今却成为运行九个 OpenClaw 智能体、拥有三台 Mac Mini 的\"真信徒\"。本期核心是：**OpenClaw 不是一个工具，而是一套\"个人AI员工"
+  },
+  {
+    "id": "allin-anthropic-run",
+    "title": "Anthropic的世代级崛起、OpenAI的焦虑、AI护城河与Meta败诉",
+    "date": "2026-03-27",
+    "source": "All-In Podcast",
+    "category": "debate",
+    "catLabel": "圆桌激辩",
+    "tags": [
+      "Anthropic",
+      "OpenAI",
+      "AI Moats",
+      "Meta",
+      "估值"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=4Gmd5UTF4rk",
+    "channelName": "All-In Podcast",
+    "duration": "约80分钟",
+    "summary": "本期 All-In 播客围绕 AI 行业格局巨变展开深度讨论。Anthropic 凭借押注\"编程\"赛道完成了一轮令业界瞩目的产品爆发，从 Claude Code 到 Claude Co-work 再到 Computer Use，在企业市场强势突围，而 OpenAI 则陷入战略摇摆——砍掉 Sora 视频业务、追逐企业市场、向私募股权开放合作。主播们还深入探讨了 AI 时代企业估值逻辑的重构：Saa"
+  },
+  {
+    "id": "yc-chollet-scaling",
+    "title": "François Chollet：为什么光靠Scaling不够，通往AGI需要新范式",
+    "date": "2026-03-27",
+    "source": "Lightcone Podcast (Y Combinator)",
+    "category": "tech",
+    "catLabel": "技术解析",
+    "tags": [
+      "François Chollet",
+      "ARC-AGI",
+      "Scaling Laws",
+      "AGI",
+      "程序合成"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=k2ZLQC8P7dc",
+    "channelName": "Lightcone (YC)",
+    "duration": "约57分钟",
+    "summary": "François Chollet 是深度学习框架 Keras 的创始人、ARC-AGI 基准测试的设计者，也是新一代 AGI 研究实验室 NDYA 的联合创始人。本期播客围绕三个核心主题展开：一是为什么当前以扩大规模（Scaling）为核心的 LLM 路线不足以实现真正的 AGI；二是 ARC-AGI 基准测试 V1/V2/V3 各自测量什么、为何 V3 的出现代表了对\"流体智能\"更深层的挑战；三"
+  },
+  {
+    "id": "20vc-groq-deal",
+    "title": "Series A需要10亿美元基金、SpaceX 2万亿估值、Groq 200亿并购内幕",
+    "date": "2026-03-26",
+    "source": "20VC with Harry Stebbings",
+    "category": "debate",
+    "catLabel": "圆桌激辩",
+    "tags": [
+      "Groq",
+      "SpaceX",
+      "VC",
+      "Series A",
+      "AI基础设施"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=yLmM3M7d9v8",
+    "channelName": "20VC",
+    "duration": "约79分钟",
+    "summary": "这期播客聚焦几个当周最热的科技商业事件：RAMP数据显示Anthropic已拿下73%的企业AI新增消费，OpenAI的焦虑情绪正在伤害品牌；Groq以约20亿美元被Nvidia收购，揭示了天价并购背后扭曲的税务结构；SpaceX在Elon宣布建芯片厂后被市场炒到2万亿美元估值，但能否兑现仍存争议。播客还深入探讨了SaaS老公司在AI时代的\"安装基础陷阱\"，以及当前VC市场的估值泡沫风险——大量独"
+  },
+  {
+    "id": "huang-lex-fridman",
+    "title": "黄仁勋最新深度访谈：从洗碗工到3万亿美元帝国掌舵人的思维操作系统",
+    "date": "2026-03-23",
+    "source": "Lex Fridman Podcast #494",
+    "category": "interview",
+    "catLabel": "深度访谈",
+    "tags": [
+      "Jensen Huang",
+      "NVIDIA",
+      "CUDA",
+      "AI工厂",
+      "AGI"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=vif8NQcjVf0",
+    "channelName": "Lex Fridman",
+    "duration": "约3小时",
+    "summary": "这是 Lex Fridman 对英伟达 CEO 黄仁勋的最新深度访谈。黄仁勋系统性地阐述了英伟达从一家 GPU 加速器公司演变为\"AI 工厂\"基础设施帝国的完整逻辑：从 CUDA 的豪赌（市值从60多亿跌到15亿），到极端协同设计（Extreme Co-design）哲学，再到 Vera Rubin 超级计算架构。他提出了 AI 的四大扩展定律（预训练、后训练、推理时计算、智能体扩展），并将智能体"
+  },
+  {
+    "id": "allin-four-ceos-gtc",
+    "title": "四位AI CEO的GTC对话：算力、产品、开源与能源的终极博弈",
+    "date": "2026-03-23",
+    "source": "All-In Podcast — GTC 2026",
+    "category": "debate",
+    "catLabel": "圆桌激辩",
+    "tags": [
+      "CoreWeave",
+      "Perplexity",
+      "Mistral",
+      "IREN",
+      "GTC"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=-JBhTBu9ZbA",
+    "channelName": "All-In Podcast",
+    "duration": "约55分钟",
+    "summary": "本期All-In Podcast由Jason Calacanis在英伟达GTC 2026大会现场主持，分别对话四位AI基础设施与应用层CEO：CoreWeave联合创始人Michael Intrator、Perplexity CEO Aravind Srinivas、Mistral AI CEO Arthur Mensch，以及数据中心公司IREN联合创始人Daniel Roberts。"
+  },
+  {
+    "id": "figma-cro-sales",
+    "title": "Figma CRO的反直觉销售哲学：为什么我不信配额",
+    "date": "2026-03-21",
+    "source": "20VC with Harry Stebbings",
+    "category": "interview",
+    "catLabel": "深度访谈",
+    "tags": [
+      "Figma",
+      "Sales",
+      "PLG",
+      "SaaS",
+      "产品增长"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=5klhxOKZ_ag",
+    "channelName": "20VC",
+    "duration": "约65分钟",
+    "summary": "本期嘉宾是 Figma 首席营收官（CRO）Sean Bosconian，他在 Figma 已有四年半经历，此前曾在 Datadog 带过 200 人的 SDR 团队。访谈围绕 Figma 如何在 PLG（产品驱动增长）底座上构建一套企业级销售机器展开，涉及团队结构、配额哲学、绩效管理和销售招聘等核心话题。  Figma 的销售体系打破了传统 SaaS 公司的组织范式：没有专职 CS 团队，没有传"
+  },
+  {
+    "id": "karpathy-code-agents",
+    "title": "Karpathy深度访谈：代码智能体、自动化科研，以及AI的\"循环时代\"",
+    "date": "2026-03-20",
+    "source": "No Priors Podcast",
+    "category": "tech",
+    "catLabel": "技术解析",
+    "tags": [
+      "Andrej Karpathy",
+      "Code Agent",
+      "Auto Research",
+      "开源"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=kwSVtQ7dziU",
+    "channelName": "No Priors",
+    "duration": "约75分钟",
+    "summary": "前OpenAI研究员、AI教育家Andrej Karpathy做客No Priors播客，分享了他对当下AI巨变的一线体验和深度思考。他自述从2025年12月起几乎不再亲手写代码，转而全天候用AI智能体（Agent）\"表达意志\"，称之为\"AI精神病\"状态——因为能力跃升太大，边界完全未知，让人焦虑又兴奋。"
+  },
+  {
+    "id": "huang-allin-gtc",
+    "title": "黄仁勋GTC大会深度对话：推理爆炸、Agent革命与AI的万亿美元未来",
+    "date": "2026-03-19",
+    "source": "All-In Podcast — GTC 2026 Live",
+    "category": "interview",
+    "catLabel": "深度访谈",
+    "tags": [
+      "Jensen Huang",
+      "NVIDIA",
+      "GTC",
+      "Agent",
+      "推理"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=gwW8GKwHB3I",
+    "channelName": "All-In Podcast",
+    "duration": "约55分钟",
+    "summary": "2026年3月GTC大会上，All-In Podcast四位主播与英伟达CEO黄仁勋进行了一场深度对话。黄仁勋全面阐述了英伟达从GPU公司向\"AI工厂\"公司的战略转型：通过收购Groq、推出Dynamo操作系统和Vera Rubin架构，实现推理计算的分解与异构化。他强调推理需求已爆炸式增长——从生成式AI到推理再到Agent，计算量在两年内增长了一万倍，并预测将达到百万倍。黄仁勋认为Agent时"
+  },
+  {
+    "id": "20vc-nvidia-gtc-anduril",
+    "title": "NVIDIA万亿收入预测、Anduril $200亿合同、裁员潮与AI流利度新标准",
+    "date": "2026-03-19",
+    "source": "20VC with Harry Stebbings",
+    "category": "debate",
+    "catLabel": "圆桌激辩",
+    "tags": [
+      "NVIDIA",
+      "GTC",
+      "Anduril",
+      "裁员",
+      "AI流利度"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=lTuS7Ns8cZg",
+    "channelName": "20VC",
+    "duration": "约78分钟",
+    "summary": "本期节目是 20VC 的多人圆桌，主持人 Harry Stebbings 与投资人 Jason Calacanis、Rory 共同复盘了 2026 年 3 月最密集的一周科技新闻。核心议题有四："
+  },
+  {
+    "id": "yc-ai-builders",
+    "title": "AI正在解锁数百万新创造者：YC看到的创业新范式",
+    "date": "2026-03-16",
+    "source": "Lightcone Podcast (Y Combinator)",
+    "category": "tech",
+    "catLabel": "技术解析",
+    "tags": [
+      "YC",
+      "Vibe Coding",
+      "Agent",
+      "非技术创业",
+      "SWE-Bench"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=8SVocWnDHwE",
+    "channelName": "Lightcone (YC)",
+    "duration": "约40分钟",
+    "summary": "本期 YC 的 Lightcone 播客采访了 Emergent 的双胞胎创始人 Makund 和 Madav Jar。Emergent 是一个让任何人都可以用 AI Agent 构建并发布生产级软件的平台，在上线仅 8 个月内就有 700 万个应用被创建，是 YC 史上增长最快的公司之一。  两兄弟背景深厚——一位曾在 Google 工作并创办了印度快速配送独角兽 Dunzo，另一位曾在亚马逊领"
+  },
+  {
+    "id": "turley-chatgpt-assistant",
+    "title": "ChatGPT的超级助手野心：9亿周活背后的产品哲学与下一个十亿用户之战",
+    "date": "2026-03-15",
+    "source": "BG2 Pod — Guest Interview",
+    "category": "interview",
+    "catLabel": "深度访谈",
+    "tags": [
+      "Nick Turley",
+      "OpenAI",
+      "ChatGPT",
+      "产品",
+      "增长"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=MIKej1HCRW0",
+    "channelName": "BG2 Pod",
+    "duration": "约55分钟",
+    "summary": "OpenAI产品负责人Nick Turley做客BG2播客，深入解析ChatGPT从一个\"本打算一个月后下线的demo\"成长为9亿周活超级产品的历程。Nick将ChatGPT的增长归因于三个各占三分之一的驱动力：经典的产品摩擦消除（如去掉登录墙）、核心产品投入（搜索、个性化）、以及纯模型能力提升。他坦言ChatGPT目前仍像一个\"原始工具\"，下一步要进化为真正的\"超级助手\"——不仅回答问题，还能主"
+  },
+  {
+    "id": "simon-last-notion-ai",
+    "title": "Notion核心人物Simon Last：从笔记应用到AI工作空间的转型内幕",
+    "date": "2026-03-12",
+    "source": "No Priors Podcast",
+    "category": "interview",
+    "catLabel": "深度访谈",
+    "tags": [
+      "Notion",
+      "AI Workspace",
+      "Agent",
+      "产品转型"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=1dYThQgOyZU",
+    "channelName": "No Priors",
+    "duration": "约29分钟",
+    "summary": "Notion 联合创始人 Simon Last 接受 No Priors 播客访谈，深度分享了 Notion 在 AI 时代的产品演进路径、工程组织变革，以及他对\"人类+Agent 协作工作台\"这一未来愿景的思考。  2022 年 GPT-4 内测时，Simon 与联创 Ivan 第一时间意识到时机已到，随即启动 AI 写作助手，并在两三个月内完成首发。此后 Notion 经历了从单步写作辅助、全"
+  },
+  {
+    "id": "cursor-not-dead",
+    "title": "\"Cursor已死\"纯属扯淡：Accel投资人用数据反驳AI编程工具末日论",
+    "date": "2026-03-09",
+    "source": "20VC with Harry Stebbings",
+    "category": "interview",
+    "catLabel": "深度访谈",
+    "tags": [
+      "Cursor",
+      "Accel",
+      "AI编程",
+      "SaaS",
+      "投资"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=3KsjuNcxTYA",
+    "channelName": "20VC",
+    "duration": "约64分钟",
+    "summary": "本期节目由 20VC 主播 Harry Stebbings 与 Accel 增长投资负责人 Miles Clements 展开对谈。核心话题围绕\"Cursor 已死\"这一网络迷因展开，Miles 作为 Cursor 的早期投资人，给出了详尽的反驳与数据支撑。  Miles 认为，AI 编程工具市场目前处于高速扩张阶段，Claude Code 的崛起并非以 Cursor 为代价，而是在整体做大市场："
+  },
+  {
+    "id": "monday-saas-dead",
+    "title": "Monday.com CEO：SaaS是否已死？Vibe Coding会颠覆一切吗？",
+    "date": "2026-03-02",
+    "source": "20VC with Harry Stebbings",
+    "category": "interview",
+    "catLabel": "深度访谈",
+    "tags": [
+      "Monday.com",
+      "SaaS",
+      "Vibe Coding",
+      "AI转型",
+      "定价"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=zjcYlEiwnKI",
+    "channelName": "20VC",
+    "duration": "约74分钟",
+    "summary": "monday.com联合创始人兼CEO Eran Zinman在市值跌至近营收1.3倍的低点时，接受了20VC主持人Harry Stebbings的深度专访。他系统拆解了市场上流传的SaaS\"末日论\"——vibe coding自建替代品、AI模型公司吞噬应用层、平台沦为数据库——并逐一给出反驳与应对思路。  核心观点是：软件行业正在经历25年来最大的价值重构。过去，软件工具只承担10-20%的工作"
+  },
+  {
+    "id": "jenny-wen-claude-design",
+    "title": "Claude设计负责人Jenny Wen：设计流程已死，AI原生产品的新做法",
+    "date": "2026-03-01",
+    "source": "Lenny's Podcast",
+    "category": "interview",
+    "catLabel": "深度访谈",
+    "tags": [
+      "Anthropic",
+      "Claude",
+      "设计",
+      "AI产品",
+      "Legibility"
+    ],
+    "videoUrl": "https://www.youtube.com/watch?v=eh8bcBIAAFo",
+    "channelName": "Lenny's Podcast",
+    "duration": "约77分钟",
+    "summary": "Jenny Wen 是 Anthropic 的设计负责人，此前在 Figma 担任设计总监，主导过 FigJam 和 Slides 两款产品。这期对话聚焦在 AI 时代设计这个职业的底层逻辑正在如何被重写。  Jenny 的核心观点是：传统的设计流程（调研→发散→收敛→原型→迭代）已经实质性死亡。真正驱动这个变化的不是设计工具，而是工程端的变革——工程师用 Claude Code 等 AI 工具可"
+  }
+]
